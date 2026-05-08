@@ -3,272 +3,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
-  <title>Plan de tratamiento de Carla</title>
-
+  <title>Virtual Patient Card</title>
   <meta property="og:title" content="Carla, tu sonrisa empieza aquí" />
   <meta property="og:description" content="Tu plan de tratamiento personalizado, explicado paso a paso." />
-  <meta property="og:image" content="https://jalonso986.github.io/patient-case-converter-demo/patient-case-converter-demo/01%20-%20Preview%20Virtual%20Card%20Whatsapp.png" />
   <meta property="og:type" content="website" />
-
   <style>
-    html, body {
-      margin: 0;
-      background: #f4f4f4;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      overscroll-behavior: none;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 430px;
-      min-height: 100vh;
-      background: white;
-      position: relative;
-      overflow-x: hidden;
-    }
-
-    .screen { display: none; position: relative; }
-    .screen.active { display: block; }
-
-    .screen-img, .home-img {
-      width: 100%;
-      display: block;
-    }
-
-    .hotspot {
-      position: absolute;
-      cursor: pointer;
-      background: rgba(255,255,255,0);
-      z-index: 20;
-    }
-
-    .back {
-      position: fixed;
-      top: 10px;
-      left: calc(50% - 205px);
-      z-index: 90;
-      background: rgba(255,255,255,0.95);
-      border: 1px solid #ddd;
-      border-radius: 18px;
-      padding: 7px 12px;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    @media (max-width: 430px) {
-      .back { left: 10px; }
-    }
-
-    /* HOME recortada para evitar blanco sobrante */
-    .home-frame {
-      position: relative;
-      width: 100%;
-      height: 1010px;
-      overflow: hidden;
-      background: white;
-    }
-
-    .home-frame img {
-      width: 100%;
-      display: block;
-    }
-
-    /* DESGLOSE: header fijo + lista scrollable */
-    .breakdown-fixed {
-      position: sticky;
-      top: 0;
-      z-index: 30;
-      background: white;
-      height: 392px;
-      overflow: hidden;
-      border-bottom: 1px solid #ddd;
-    }
-
-    .breakdown-fixed img {
-      width: 100%;
-      display: block;
-    }
-
-    .breakdown-scroll {
-      position: relative;
-      height: calc(100vh - 392px);
-      overflow-y: auto;
-      overflow-x: hidden;
-      background: white;
-    }
-
-    .breakdown-scroll-inner {
-      position: relative;
-      height: 1410px;
-      overflow: hidden;
-    }
-
-    .breakdown-scroll-inner img {
-      width: 100%;
-      display: block;
-      transform: translateY(-392px);
-    }
-
-    /* DETALLE FULL SCREEN + ZOOM */
-    .detail-view {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: white;
-      z-index: 70;
-      overflow: auto;
-      touch-action: pan-x pan-y pinch-zoom;
-    }
-
-    .detail-view.active { display: block; }
-
-    .detail-img {
-      width: 100%;
-      max-width: none;
-      display: block;
-      margin-top: 48px;
-    }
+    * { box-sizing: border-box; }
+    html, body { margin:0; padding:0; background:#f4f4f4; font-family: Arial, Helvetica, sans-serif; display:flex; justify-content:center; overscroll-behavior:none; }
+    .app { width:100%; max-width:414px; min-height:100vh; background:#fff; position:relative; overflow-x:hidden; }
+    .screen { display:none; position:relative; width:100%; min-height:100vh; background:#fff; }
+    .screen.active { display:block; }
+    .back { position:fixed; top:10px; left:calc(50% - 197px); z-index:100; background:rgba(255,255,255,.96); border:1px solid #ddd; border-radius:18px; padding:7px 12px; font-size:14px; color:#111; cursor:pointer; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+    @media (max-width:414px){ .back{ left:10px; } }
+    .home { padding:22px 12px 20px; }
+    .patient-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+    .patient-left { display:flex; align-items:center; gap:12px; min-width:0; }
+    .patient-photo { width:64px; height:64px; border-radius:50%; object-fit:cover; background:#eee; }
+    .patient-name { font-size:18px; font-weight:700; line-height:1.05; }
+    .patient-age { font-size:14px; margin-top:4px; }
+    .patient-status { font-size:12px; color:#00856f; font-weight:700; margin-top:4px; }
+    .clinic-logo { width:72px; height:72px; object-fit:contain; }
+    .summary-card { display:grid; grid-template-columns:1fr 1px 1fr; gap:16px; background:#eaf7fc; border-radius:20px; padding:18px; margin-bottom:12px; }
+    .divider { background:#aac1c8; width:1px; }
+    .label { font-size:13px; font-weight:700; color:#0a2b4d; margin-bottom:8px; }
+    .amount { font-size:31px; font-weight:800; color:#00967f; letter-spacing:-1px; }
+    .finance { font-size:11px; color:#0a2b4d; margin-top:12px; line-height:1.2; }
+    .cta { display:flex; align-items:center; justify-content:space-between; padding:8px 0; font-size:13px; color:#0a2b4d; cursor:pointer; }
+    .cta-icon { width:30px; height:30px; border-radius:50%; background:#c8f5ef; display:inline-flex; align-items:center; justify-content:center; margin-right:9px; color:#00967f; font-weight:700; }
+    .odontogram { border:1px solid #ccc; border-radius:8px; overflow:hidden; margin:12px 0; }
+    .odontogram img { width:100%; display:block; }
+    .caption { text-align:center; color:#0a2b4d; font-size:10px; margin-top:-16px; padding-bottom:8px; position:relative; z-index:1; }
+    .section-title { display:flex; justify-content:space-between; align-items:center; font-size:14px; color:#0a2b4d; margin:12px 4px 6px; letter-spacing:.3px; }
+    .mini-list { border:1px solid #ccc; border-radius:8px; overflow:hidden; }
+    .mini-item { display:grid; grid-template-columns:54px 1fr 78px 18px; gap:8px; align-items:center; padding:8px 8px; border-bottom:1px solid #ddd; cursor:pointer; }
+    .mini-item:last-child { border-bottom:0; }
+    .mini-item.warning { background:#ffe9bd; }
+    .icon { width:46px; height:46px; border-radius:50%; object-fit:cover; object-position:center; border:1px solid #222; background:#fff; display:block; }
+    .mini-title { font-size:14px; font-weight:700; line-height:1.05; }
+    .mini-desc { margin-top:4px; font-size:11px; line-height:1.15; color:#0a2b4d; }
+    .warning .mini-desc { color:#f06f2c; }
+    .mini-price { font-size:13px; font-weight:700; text-align:right; white-space:nowrap; }
+    #breakdown.active { display:flex; flex-direction:column; height:100vh; overflow:hidden; background:#fff; }
+    .bd-top { flex:0 0 auto; padding:22px 12px 10px; background:#fff; border-bottom:1px solid #ddd; }
+    .bd-column-header { display:grid; grid-template-columns:64px 104px 34px 62px 54px 58px 18px; padding:4px 8px; border-bottom:1px solid #cfcfcf; color:#555; font-size:13px; flex:0 0 auto; }
+    .bd-column-header .concepto { grid-column:1 / span 2; padding-left:12px; text-align:left; }
+    .bd-column-header div { text-align:right; white-space:nowrap; }
+    .bd-column-header .pieza { text-align:center; }
+    .bd-list { flex:1 1 auto; overflow-y:auto; overflow-x:hidden; padding:0 8px 20px 8px; background:#fff; }
+    .item { display:grid; grid-template-columns:64px 104px 34px 62px 54px 58px 18px; align-items:center; min-height:78px; border-bottom:1px solid #cfcfcf; background:#fff; cursor:pointer; column-gap:0; }
+    .item.warning { background:#ffe9bd; border-radius:8px; margin:5px 0; border-bottom:none; }
+    .bd-icon { width:46px; height:46px; border-radius:50%; object-fit:cover; object-position:center; border:1px solid #222; margin-left:14px; display:block; background:#fff; }
+    .name { font-size:13.5px; font-weight:700; line-height:1.08; color:#222; }
+    .desc { font-size:10.5px; line-height:1.15; color:#0a2b4d; margin-top:4px; }
+    .warning .desc { color:#f06f2c; }
+    .badge { display:inline-block; background:#ffd993; color:#f08a00; font-size:8px; font-weight:700; padding:2px 6px; border-radius:8px; margin-bottom:3px; }
+    .cell { font-size:13.5px; color:#222; text-align:right; white-space:nowrap; }
+    .piece { text-align:center; }
+    .total { font-size:13.5px; font-weight:700; text-align:right; white-space:nowrap; color:#222; }
+    .chev { font-size:22px; color:#222; text-align:center; }
+    .screen-img { width:100%; display:block; }
+    .detail-view { display:none; position:fixed; inset:0; background:#fff; z-index:80; overflow:auto; touch-action:pan-x pan-y pinch-zoom; }
+    .detail-view.active { display:block; }
+    .detail-img { width:100%; max-width:none; display:block; margin-top:50px; }
   </style>
 </head>
-
 <body>
   <div class="app">
-
-    <!-- HOME -->
-    <section id="home" class="screen active">
-      <div class="home-frame">
-        <img class="home-img" src="02 - Vista inicial.png" />
-
-        <!-- Resolver dudas por WhatsApp -->
-        <a class="hotspot"
-           style="left:50%; top:13.5%; width:47%; height:6.5%;"
-           href="https://wa.me/"
-           target="_blank"></a>
-
-        <!-- Ver plan paso a paso -->
-        <div class="hotspot"
-             style="left:50%; top:21.5%; width:47%; height:6.5%;"
-             onclick="showScreen('timeline')"></div>
-
-        <!-- Ver coste desglosado -->
-        <div class="hotspot"
-             style="left:50%; top:29.5%; width:47%; height:6.5%;"
-             onclick="showScreen('breakdown')"></div>
-
-        <!-- Click en bloque desglose -->
-        <div class="hotspot"
-             style="left:0%; top:57%; width:100%; height:20%;"
-             onclick="showScreen('breakdown')"></div>
-
-        <!-- Ver desglose completo -->
-        <div class="hotspot"
-             style="left:55%; top:60%; width:42%; height:6%;"
-             onclick="showScreen('breakdown')"></div>
-
-        <!-- Click en timeline -->
-        <div class="hotspot"
-             style="left:0%; top:78%; width:100%; height:20%;"
-             onclick="showScreen('timeline')"></div>
-
-        <!-- Ver plan completo -->
-        <div class="hotspot"
-             style="left:55%; top:79%; width:42%; height:6%;"
-             onclick="showScreen('timeline')"></div>
-      </div>
-    </section>
-
-    <!-- DESGLOSE -->
+    <section id="home" class="screen active"><div class="home" id="homeContent"></div></section>
     <section id="breakdown" class="screen">
       <button class="back" onclick="goBack()">← Volver</button>
-
-      <div class="breakdown-fixed">
-        <img src="03 - Plan desglose.png" />
-      </div>
-
-      <div class="breakdown-scroll">
-        <div class="breakdown-scroll-inner">
-          <img src="03 - Plan desglose.png" />
-
-          <div class="hotspot" style="left:0%; top:0px; width:100%; height:78px;" onclick="openDetail('multidisciplinar.png')"></div>
-          <div class="hotspot" style="left:0%; top:78px; width:100%; height:78px;" onclick="openDetail('gingivitis.png')"></div>
-          <div class="hotspot" style="left:0%; top:156px; width:100%; height:78px;" onclick="openDetail('sarpe.png')"></div>
-          <div class="hotspot" style="left:0%; top:234px; width:100%; height:78px;" onclick="openDetail('alineadores.png')"></div>
-          <div class="hotspot" style="left:0%; top:312px; width:100%; height:78px;" onclick="openDetail('carillas.png')"></div>
-          <div class="hotspot" style="left:0%; top:390px; width:100%; height:78px;" onclick="openDetail('carillas.png')"></div>
-          <div class="hotspot" style="left:0%; top:468px; width:100%; height:78px;" onclick="openDetail('carillas.png')"></div>
-          <div class="hotspot" style="left:0%; top:546px; width:100%; height:78px;" onclick="openDetail('carillas.png')"></div>
-          <div class="hotspot" style="left:0%; top:624px; width:100%; height:78px;" onclick="openDetail('carillas.png')"></div>
-          <div class="hotspot" style="left:0%; top:702px; width:100%; height:78px;" onclick="openDetail('carillas.png')"></div>
-          <div class="hotspot" style="left:0%; top:780px; width:100%; height:78px;" onclick="openDetail('ferula.png')"></div>
-          <div class="hotspot" style="left:0%; top:858px; width:100%; height:78px;" onclick="openDetail('essix.png')"></div>
-          <div class="hotspot" style="left:0%; top:936px; width:100%; height:90px;" onclick="openDetail('retainer.png')"></div>
-        </div>
-      </div>
+      <div class="bd-top" id="breakdownTop"></div>
+      <div class="bd-column-header"><div class="concepto">Concepto</div><div class="pieza">Pieza</div><div>Importe</div><div>Desc.</div><div>Total</div><div></div></div>
+      <div class="bd-list" id="treatmentList"></div>
     </section>
-
-    <!-- TIMELINE -->
-    <section id="timeline" class="screen">
-      <button class="back" onclick="goBack()">← Volver</button>
-      <img class="screen-img" src="06 - Plan tratamiento.png" />
-    </section>
-
+    <section id="timeline" class="screen"><button class="back" onclick="goBack()">← Volver</button><img class="screen-img" id="timelineImg" src="" /></section>
   </div>
-
-  <!-- DETALLE EXPANDIDO -->
-  <div id="detail" class="detail-view">
-    <button class="back" onclick="goBack()">← Volver</button>
-    <img id="detail-img" class="detail-img" src="" />
-  </div>
-
+  <div id="detail" class="detail-view"><button class="back" onclick="goBack()">← Volver</button><img id="detail-img" class="detail-img" src="" /></div>
+  <script src="data.js"></script>
   <script>
-    let currentScreen = "home";
-
-    history.replaceState({ screen: "home" }, "");
-
-    function showScreen(id, push = true) {
-      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
-      document.getElementById(id).classList.add("active");
-      closeDetail(false);
-      currentScreen = id;
-      window.scrollTo(0, 0);
-
-      if (push) {
-        history.pushState({ screen: id }, "");
-      }
+    let currentScreen = 'home';
+    history.replaceState({ screen: 'home' }, '');
+    const $ = (id) => document.getElementById(id);
+    function money(v){ return v || ''; }
+    function treatmentLines(title){ return String(title).replace(' ', '<br>'); }
+    function renderHeader(){
+      const p = patientData.patient;
+      return `<div class="patient-header"><div class="patient-left"><img class="patient-photo" src="${p.photo}"/><div><div class="patient-name">${p.name}</div><div class="patient-age">${p.age}</div><div class="patient-status">● ${p.status}</div></div></div><img class="clinic-logo" src="${p.logo}"/></div>`;
     }
-
-    function openDetail(src, push = true) {
-      document.getElementById("detail-img").src = src;
-      document.getElementById("detail").classList.add("active");
-
-      if (push) {
-        history.pushState({ screen: currentScreen, detail: src }, "");
-      }
+    function renderHome(){
+      const f = patientData.financial;
+      const od = patientData.odontogram;
+      const priority = patientData.treatments.filter(t => patientData.summaryTreatments.includes(t.title)).slice(0,3);
+      $('homeContent').innerHTML = `${renderHeader()}<div class="summary-card"><div><div class="label">Inversión total</div><div class="amount">${f.total}</div><div class="finance">${f.financingAvailable ? '● Financiación disponible<br><br>' : ''}Desde <b>${f.monthly}</b><br>${f.monthlyNote}</div></div><div class="divider"></div><div><div class="cta" onclick="window.open('https://wa.me/','_blank')"><span><span class="cta-icon">☏</span>Resolver dudas por WhatsApp</span><b>›</b></div><div class="cta" onclick="showScreen('timeline')"><span><span class="cta-icon">▦</span>Ver plan paso a paso</span><b>›</b></div><div class="cta" onclick="showScreen('breakdown')"><span><span class="cta-icon">€</span>Ver coste desglosado</span><b>›</b></div></div></div><div class="odontogram"><img src="${od.image}"/></div><div class="caption">● ${od.caption}</div><div class="section-title"><span>PLAN TRATAMIENTO</span><span onclick="showScreen('breakdown')" style="cursor:pointer">Ver desglose completo ↗</span></div><div class="mini-list">${priority.map(t => `<div class="mini-item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="icon" src="${t.icon}"/><div><div class="mini-title">${t.title}</div><div class="mini-desc">${t.description}</div></div><div class="mini-price">${t.total}</div><div>›</div></div>`).join('')}</div><div class="section-title"><span>TU PLAN EN VARIAS FASES</span><span onclick="showScreen('timeline')" style="cursor:pointer">Ver plan completo ↗</span></div><img class="screen-img" src="${patientData.timeline.image}"/>`;
     }
-
-    function closeDetail(clear = true) {
-      document.getElementById("detail").classList.remove("active");
-      if (clear) document.getElementById("detail-img").src = "";
+    function renderBreakdown(){
+      $('breakdownTop').innerHTML = renderHeader() + `<div class="odontogram"><img src="${patientData.odontogram.image}"/></div><div class="caption">● ${patientData.odontogram.caption}</div>`;
+      $('treatmentList').innerHTML = patientData.treatments.map(t => `<div class="item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="bd-icon" src="${t.icon}"/><div>${t.warning ? '<div class="badge">⚠ ATENCIÓN</div>' : ''}<div class="name">${treatmentLines(t.title)}</div><div class="desc">${t.description}</div></div><div class="cell piece">${t.piece || ''}</div><div class="cell">${money(t.price)}</div><div class="cell">${money(t.discount)}</div><div class="total">${money(t.total)}</div><div class="chev">›</div></div>`).join('');
+      $('timelineImg').src = patientData.timeline.image;
     }
-
-    function goBack() {
-      history.back();
-    }
-
-    window.addEventListener("popstate", function(event) {
-      const state = event.state || { screen: "home" };
-
-      if (state.detail) {
-        showScreen(state.screen, false);
-        openDetail(state.detail, false);
-        return;
-      }
-
-      closeDetail();
-      showScreen(state.screen || "home", false);
-    });
+    function showScreen(id, push = true){ document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); closeDetail(false); currentScreen = id; window.scrollTo(0,0); if(push) history.pushState({screen:id}, ''); }
+    function openDetail(src, push = true){ $('detail-img').src = src; $('detail').classList.add('active'); if(push) history.pushState({screen:currentScreen, detail:src}, ''); }
+    function closeDetail(clear = true){ $('detail').classList.remove('active'); if(clear) $('detail-img').src = ''; }
+    function goBack(){ history.back(); }
+    window.addEventListener('popstate', function(event){ const state = event.state || {screen:'home'}; if(state.detail){ showScreen(state.screen, false); openDetail(state.detail, false); return; } closeDetail(); showScreen(state.screen || 'home', false); });
+    renderHome(); renderBreakdown();
   </script>
 </body>
 </html>
