@@ -18,7 +18,9 @@
     .home { padding:22px 12px 20px; }
     .patient-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
     .patient-left { display:flex; align-items:center; gap:12px; min-width:0; }
-    .patient-photo { width:64px; height:64px; border-radius:50%; object-fit:cover; background:#eee; }
+    .patient-photo, .patient-photo-crop { width:64px; height:64px; border-radius:50%; background:#eee; flex:0 0 auto; overflow:hidden; }
+    .patient-photo { object-fit:cover; }
+    .patient-photo-crop { background-image: var(--patient-photo); background-size:414px auto; background-position:-24px -22px; background-repeat:no-repeat; }
     .patient-name { font-size:18px; font-weight:700; line-height:1.05; }
     .patient-age { font-size:14px; margin-top:4px; }
     .patient-status { font-size:12px; color:#00856f; font-weight:700; margin-top:4px; }
@@ -30,8 +32,9 @@
     .finance { font-size:11px; color:#0a2b4d; margin-top:12px; line-height:1.2; }
     .cta { display:flex; align-items:center; justify-content:space-between; padding:8px 0; font-size:13px; color:#0a2b4d; cursor:pointer; }
     .cta-icon { width:30px; height:30px; border-radius:50%; background:#c8f5ef; display:inline-flex; align-items:center; justify-content:center; margin-right:9px; color:#00967f; font-weight:700; }
-    .odontogram { border:1px solid #ccc; border-radius:8px; overflow:hidden; margin:12px 0; }
+    .odontogram { border:1px solid #ccc; border-radius:8px; overflow:hidden; margin:12px 0; background:#fff; }
     .odontogram img { width:100%; display:block; }
+    .odontogram-crop { height:226px; background-image:var(--odontogram-image); background-size:414px auto; background-position:0 -137px; background-repeat:no-repeat; }
     .caption { text-align:center; color:#0a2b4d; font-size:10px; margin-top:-16px; padding-bottom:8px; position:relative; z-index:1; }
     .section-title { display:flex; justify-content:space-between; align-items:center; font-size:14px; color:#0a2b4d; margin:12px 4px 6px; letter-spacing:.3px; }
     .mini-list { border:1px solid #ccc; border-radius:8px; overflow:hidden; }
@@ -86,18 +89,20 @@
     const $ = (id) => document.getElementById(id);
     function money(v){ return v || ''; }
     function treatmentLines(title){ return String(title).replace(' ', '<br>'); }
+    function renderPatientPhoto(p){ return p.photoCrop ? `<div class="patient-photo-crop" style="--patient-photo:url('${p.photo}')"></div>` : `<img class="patient-photo" src="${p.photo}"/>`; }
+    function renderOdontogram(od){ return od.crop ? `<div class="odontogram odontogram-crop" style="--odontogram-image:url('${od.image}')"></div>` : `<div class="odontogram"><img src="${od.image}"/></div>`; }
     function renderHeader(){
       const p = patientData.patient;
-      return `<div class="patient-header"><div class="patient-left"><img class="patient-photo" src="${p.photo}"/><div><div class="patient-name">${p.name}</div><div class="patient-age">${p.age}</div><div class="patient-status">● ${p.status}</div></div></div><img class="clinic-logo" src="${p.logo}"/></div>`;
+      return `<div class="patient-header"><div class="patient-left">${renderPatientPhoto(p)}<div><div class="patient-name">${p.name}</div><div class="patient-age">${p.age}</div><div class="patient-status">● ${p.status}</div></div></div><img class="clinic-logo" src="${p.logo}"/></div>`;
     }
     function renderHome(){
       const f = patientData.financial;
       const od = patientData.odontogram;
       const priority = patientData.treatments.filter(t => patientData.summaryTreatments.includes(t.title)).slice(0,3);
-      $('homeContent').innerHTML = `${renderHeader()}<div class="summary-card"><div><div class="label">Inversión total</div><div class="amount">${f.total}</div><div class="finance">${f.financingAvailable ? '● Financiación disponible<br><br>' : ''}Desde <b>${f.monthly}</b><br>${f.monthlyNote}</div></div><div class="divider"></div><div><div class="cta" onclick="window.open('https://wa.me/','_blank')"><span><span class="cta-icon">☏</span>Resolver dudas por WhatsApp</span><b>›</b></div><div class="cta" onclick="showScreen('timeline')"><span><span class="cta-icon">▦</span>Ver plan paso a paso</span><b>›</b></div><div class="cta" onclick="showScreen('breakdown')"><span><span class="cta-icon">€</span>Ver coste desglosado</span><b>›</b></div></div></div><div class="odontogram"><img src="${od.image}"/></div><div class="caption">● ${od.caption}</div><div class="section-title"><span>PLAN TRATAMIENTO</span><span onclick="showScreen('breakdown')" style="cursor:pointer">Ver desglose completo ↗</span></div><div class="mini-list">${priority.map(t => `<div class="mini-item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="icon" src="${t.icon}"/><div><div class="mini-title">${t.title}</div><div class="mini-desc">${t.description}</div></div><div class="mini-price">${t.total}</div><div>›</div></div>`).join('')}</div><div class="section-title"><span>TU PLAN EN VARIAS FASES</span><span onclick="showScreen('timeline')" style="cursor:pointer">Ver plan completo ↗</span></div><img class="screen-img" src="${patientData.timeline.image}"/>`;
+      $('homeContent').innerHTML = `${renderHeader()}<div class="summary-card"><div><div class="label">Inversión total</div><div class="amount">${f.total}</div><div class="finance">${f.financingAvailable ? '● Financiación disponible<br><br>' : ''}Desde <b>${f.monthly}</b><br>${f.monthlyNote}</div></div><div class="divider"></div><div><div class="cta" onclick="window.open('https://wa.me/','_blank')"><span><span class="cta-icon">☏</span>Resolver dudas por WhatsApp</span><b>›</b></div><div class="cta" onclick="showScreen('timeline')"><span><span class="cta-icon">▦</span>Ver plan paso a paso</span><b>›</b></div><div class="cta" onclick="showScreen('breakdown')"><span><span class="cta-icon">€</span>Ver coste desglosado</span><b>›</b></div></div></div>${renderOdontogram(od)}<div class="caption">● ${od.caption}</div><div class="section-title"><span>PLAN TRATAMIENTO</span><span onclick="showScreen('breakdown')" style="cursor:pointer">Ver desglose completo ↗</span></div><div class="mini-list">${priority.map(t => `<div class="mini-item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="icon" src="${t.icon}"/><div><div class="mini-title">${t.title}</div><div class="mini-desc">${t.description}</div></div><div class="mini-price">${t.total}</div><div>›</div></div>`).join('')}</div><div class="section-title"><span>TU PLAN EN VARIAS FASES</span><span onclick="showScreen('timeline')" style="cursor:pointer">Ver plan completo ↗</span></div><img class="screen-img" src="${patientData.timeline.image}"/>`;
     }
     function renderBreakdown(){
-      $('breakdownTop').innerHTML = renderHeader() + `<div class="odontogram"><img src="${patientData.odontogram.image}"/></div><div class="caption">● ${patientData.odontogram.caption}</div>`;
+      $('breakdownTop').innerHTML = renderHeader() + `${renderOdontogram(patientData.odontogram)}<div class="caption">● ${patientData.odontogram.caption}</div>`;
       $('treatmentList').innerHTML = patientData.treatments.map(t => `<div class="item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="bd-icon" src="${t.icon}"/><div>${t.warning ? '<div class="badge">⚠ ATENCIÓN</div>' : ''}<div class="name">${treatmentLines(t.title)}</div><div class="desc">${t.description}</div></div><div class="cell piece">${t.piece || ''}</div><div class="cell">${money(t.price)}</div><div class="cell">${money(t.discount)}</div><div class="total">${money(t.total)}</div><div class="chev">›</div></div>`).join('');
       $('timelineImg').src = patientData.timeline.image;
     }
