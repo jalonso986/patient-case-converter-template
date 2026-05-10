@@ -17,8 +17,7 @@ const patientData = {
 
   odontogram: {
     image: "assets/odontograma-source.png",
-    crop: true,
-    caption: "Zonas a tratar marcadas en azul"
+    crop: false
   },
 
   summaryTreatments: [
