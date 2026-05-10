@@ -3,7 +3,8 @@ const patientData = {
     name: "Carla Aveiro Pérez",
     age: "16 años",
     status: "Tu plan personalizado ya está listo",
-    photo: "assets/patient-carla.png",
+    photo: "assets/patient-carla-source.png",
+    photoCrop: true,
     logo: "assets/logo-Araujo.jpeg"
   },
 
@@ -15,7 +16,8 @@ const patientData = {
   },
 
   odontogram: {
-    image: "assets/odontograma.png",
+    image: "assets/odontograma-source.png",
+    crop: true,
     caption: "Zonas a tratar marcadas en azul"
   },
 
