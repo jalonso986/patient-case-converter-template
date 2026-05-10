@@ -161,6 +161,7 @@ const patientData = {
   ],
 
   timeline: {
-    image: "assets/plan-tratamiento.png"
+    image: "assets/plan-tratamiento.png",
+    crop: true
   }
 };
