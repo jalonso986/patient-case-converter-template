@@ -39,6 +39,7 @@
     .odontogram { overflow:hidden; margin:12px 0; background:#fff; }
     .odontogram img { width:100%; display:block; }
     .odontogram-crop { height:238px; border:0; border-radius:8px; background-image:var(--odontogram-image); background-size:100% auto; background-position:center -132px; background-repeat:no-repeat; }
+    .timeline-crop { width:100%; height:314px; background-image:var(--timeline-image); background-size:100% auto; background-position:center -116px; background-repeat:no-repeat; margin-top:4px; }
     .section-title { display:flex; justify-content:space-between; align-items:center; font-size:14px; color:#0a2b4d; margin:12px 4px 6px; letter-spacing:.3px; }
     .mini-list { border:1px solid #ccc; border-radius:8px; overflow:hidden; }
     .mini-item { display:grid; grid-template-columns:54px 1fr 78px 18px; gap:8px; align-items:center; padding:8px 8px; border-bottom:1px solid #ddd; cursor:pointer; }
@@ -82,7 +83,7 @@
       <div class="bd-column-header"><div class="concepto">Concepto</div><div class="pieza">Pieza</div><div>Importe</div><div>Desc.</div><div>Total</div><div></div></div>
       <div class="bd-list" id="treatmentList"></div>
     </section>
-    <section id="timeline" class="screen"><button class="back" onclick="goBack()">← Volver</button><img class="screen-img" id="timelineImg" src="" /></section>
+    <section id="timeline" class="screen"><button class="back" onclick="goBack()">← Volver</button><div id="timelineScreenContent"></div></section>
   </div>
   <div id="detail" class="detail-view"><button class="back" onclick="goBack()">← Volver</button><img id="detail-img" class="detail-img" src="" /></div>
   <script src="data.js"></script>
@@ -95,6 +96,7 @@
     function treatmentLines(title){ return String(title).replace(' ', '<br>'); }
     function renderPatientPhoto(p){ return p.photoCrop ? `<div class="patient-photo-crop" style="--patient-photo:url('${p.photo}')"></div>` : `<img class="patient-photo" src="${p.photo}"/>`; }
     function renderOdontogram(od){ return od.crop ? `<div class="odontogram odontogram-crop" style="--odontogram-image:url('${od.image}')"></div>` : `<div class="odontogram"><img src="${od.image}"/></div>`; }
+    function renderTimeline(tl){ return tl.crop ? `<div class="timeline-crop" style="--timeline-image:url('${tl.image}')"></div>` : `<img class="screen-img" src="${tl.image}"/>`; }
     function renderHeader(){
       const p = patientData.patient;
       return `<div class="patient-header"><div class="patient-left">${renderPatientPhoto(p)}<div><div class="patient-name">${p.name}</div><div class="patient-age">${p.age}</div><div class="patient-status">● ${p.status}</div></div></div><img class="clinic-logo" src="${p.logo}"/></div>`;
@@ -119,13 +121,13 @@
       const f = patientData.financial;
       const od = patientData.odontogram;
       const priority = patientData.treatments.filter(t => patientData.summaryTreatments.includes(t.title)).slice(0,3);
-      $('homeContent').innerHTML = `${renderHeader()}<div class="summary-card"><div class="summary-main"><div class="label">Inversión total</div><div class="amount">${normalizeCurrency(f.total)}</div><div class="finance">${f.financingAvailable ? '● Financiación disponible<br><br>' : ''}Desde <b>${f.monthly}</b><br>${f.monthlyNote}</div></div><div class="divider"></div><div class="summary-actions">${renderCta('☏','Resolver dudas<br>por WhatsApp',"window.open('https://wa.me/','_blank')")}${renderCta('▦','Ver plan paso a<br>paso',"showScreen('timeline')")}${renderCta('€','Ver coste<br>desglosado',"showScreen('breakdown')")}</div></div>${renderOdontogram(od)}<div class="section-title"><span>PLAN TRATAMIENTO</span><span onclick="showScreen('breakdown')" style="cursor:pointer">Ver desglose completo ↗</span></div><div class="mini-list">${priority.map(t => `<div class="mini-item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="icon" src="${t.icon}"/><div><div class="mini-title">${t.title}</div><div class="mini-desc">${t.description}</div></div><div class="mini-price">${t.total}</div><div>›</div></div>`).join('')}</div><div class="section-title"><span>TU PLAN EN VARIAS FASES</span><span onclick="showScreen('timeline')" style="cursor:pointer">Ver plan completo ↗</span></div><img class="screen-img" src="${patientData.timeline.image}"/>`;
+      $('homeContent').innerHTML = `${renderHeader()}<div class="summary-card"><div class="summary-main"><div class="label">Inversión total</div><div class="amount">${normalizeCurrency(f.total)}</div><div class="finance">${f.financingAvailable ? '● Financiación disponible<br><br>' : ''}Desde <b>${f.monthly}</b><br>${f.monthlyNote}</div></div><div class="divider"></div><div class="summary-actions">${renderCta('☏','Resolver dudas<br>por WhatsApp',"window.open('https://wa.me/','_blank')")}${renderCta('▦','Ver plan paso a<br>paso',"showScreen('timeline')")}${renderCta('€','Ver coste<br>desglosado',"showScreen('breakdown')")}</div></div>${renderOdontogram(od)}<div class="section-title"><span>PLAN TRATAMIENTO</span><span onclick="showScreen('breakdown')" style="cursor:pointer">Ver desglose completo ↗</span></div><div class="mini-list">${priority.map(t => `<div class="mini-item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="icon" src="${t.icon}"/><div><div class="mini-title">${t.title}</div><div class="mini-desc">${t.description}</div></div><div class="mini-price">${t.total}</div><div>›</div></div>`).join('')}</div><div class="section-title"><span>TU PLAN EN VARIAS FASES</span><span onclick="showScreen('timeline')" style="cursor:pointer">Ver plan completo ↗</span></div>${renderTimeline(patientData.timeline)}`;
       requestAnimationFrame(adjustAmountSize);
     }
     function renderBreakdown(){
       $('breakdownTop').innerHTML = renderHeader() + `${renderOdontogram(patientData.odontogram)}`;
       $('treatmentList').innerHTML = patientData.treatments.map(t => `<div class="item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="bd-icon" src="${t.icon}"/><div>${t.warning ? '<div class="badge">⚠ ATENCIÓN</div>' : ''}<div class="name">${treatmentLines(t.title)}</div><div class="desc">${t.description}</div></div><div class="cell piece">${t.piece || ''}</div><div class="cell">${money(t.price)}</div><div class="cell">${money(t.discount)}</div><div class="total">${money(t.total)}</div><div class="chev">›</div></div>`).join('');
-      $('timelineImg').src = patientData.timeline.image;
+      $('timelineScreenContent').innerHTML = renderTimeline(patientData.timeline);
     }
     function showScreen(id, push = true){ document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); closeDetail(false); currentScreen = id; window.scrollTo(0,0); if(push) history.pushState({screen:id}, ''); }
     function openDetail(src, push = true){ $('detail-img').src = src; $('detail').classList.add('active'); if(push) history.pushState({screen:currentScreen, detail:src}, ''); }
