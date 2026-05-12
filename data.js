@@ -162,6 +162,37 @@ const patientData = {
 
   timeline: {
     image: "assets/plan-tratamiento.png",
-    crop: true
+    crop: true,
+    startDate: "30 de junio",
+    intro: "antes del verano tu sonrisa ya estará en marcha.",
+    phases: [
+      {
+        date: "30 junio",
+        emotion: "Tu boca sana es el punto de partida de todo lo que viene.",
+        items: [
+          { text: "Tratamos tu gingivitis", link: "explanations/gingivitis.png" },
+          "Empezamos a alinear tu mordida"
+        ],
+        color: "#2a7c6f"
+      },
+      {
+        date: "julio – agosto",
+        emotion: "Aquí empieza el cambio que vas a notar cada vez que te mires al espejo.",
+        items: ["Alineamos tus dientes y ajustamos tu mordida con Invisalign"],
+        color: "#e8934a"
+      },
+      {
+        date: "septiembre – octubre",
+        emotion: "Aquí tu sonrisa empieza a tomar su forma definitiva.",
+        items: ["Restauramos tu sonrisa con carillas de porcelana"],
+        color: "#4a9eb5"
+      },
+      {
+        date: "diciembre",
+        emotion: "Este diciembre, tu sonrisa ya es tuya.",
+        items: ["A partir de aquí, solo hay que mantenerla."],
+        color: "#c0392b"
+      }
+    ]
   }
 };
