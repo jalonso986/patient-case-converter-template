@@ -1,11 +1,5 @@
-﻿document.addEventListener('DOMContentLoaded', function () {
-  var _orig = window.renderTimelineFull;
-
-  window.renderTimelineFull = function (tl) {
-    if (!tl.phases || tl.phases.length === 0) {
-      return _orig ? _orig(tl) : '<div class="timeline-full"><img class="screen-img" src="' + tl.image + '" alt="Plan completo"/></div>';
-    }
-
+(function () {
+  function buildPhaseHTML(tl) {
     var html = '<div style="padding:24px 20px 40px;background:#fff;">';
     html += '<div style="margin-bottom:20px;">';
     html += '<h2 style="font-size:17px;font-weight:700;color:#1a1a1a;margin:0 0 6px">TU PLAN FECHA A FECHA</h2>';
@@ -32,10 +26,17 @@
 
     html += '</div></div>';
     return html;
-  };
+  }
 
   var el = document.getElementById('timelineScreenContent');
-  if (el && window.patientData && window.patientData.timeline) {
-    el.innerHTML = window.renderTimelineFull(window.patientData.timeline);
-  }
-});
+  if (!el) return;
+
+  var observer = new MutationObserver(function () {
+    var tl = window.patientData && window.patientData.timeline;
+    if (!tl || !tl.phases || tl.phases.length === 0) return;
+    observer.disconnect();
+    el.innerHTML = buildPhaseHTML(tl);
+  });
+
+  observer.observe(el, { childList: true });
+})();
