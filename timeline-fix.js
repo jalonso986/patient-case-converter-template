@@ -7,7 +7,6 @@
     html += '</div>';
     html += '<div style="position:relative;padding-left:28px;">';
     html += '<div style="position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:#e8e8e8;"></div>';
-
     tl.phases.forEach(function (phase) {
       html += '<div style="position:relative;margin-bottom:14px;">';
       html += '<div style="position:absolute;left:-24px;top:14px;width:14px;height:14px;border-radius:50%;background:' + phase.color + ';z-index:1;"></div>';
@@ -23,20 +22,20 @@
       });
       html += '</div></div>';
     });
-
     html += '</div></div>';
     return html;
   }
 
-  var el = document.getElementById('timelineScreenContent');
-  if (!el) return;
-
-  var observer = new MutationObserver(function () {
+  function applyIfNeeded() {
+    var el = document.getElementById('timelineScreenContent');
     var tl = window.patientData && window.patientData.timeline;
-    if (!tl || !tl.phases || tl.phases.length === 0) return;
-    observer.disconnect();
+    if (!el || !tl || !tl.phases || tl.phases.length === 0) return;
     el.innerHTML = buildPhaseHTML(tl);
-  });
+  }
 
-  observer.observe(el, { childList: true });
+  document.addEventListener('DOMContentLoaded', applyIfNeeded);
+  window.addEventListener('popstate', function () { setTimeout(applyIfNeeded, 0); });
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[onclick]')) { setTimeout(applyIfNeeded, 0); }
+  });
 })();
