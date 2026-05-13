@@ -66,4 +66,4 @@ Every push to main triggers GitHub Pages deploy automatically (~30s).
 Check status at: https://github.com/jalonso986/patient-case-converter-template/actions
 
 ## Known issues
-- timeline-fix.js currently broken: uses window override instead of MutationObserver. Pending fix.
+None currently.
