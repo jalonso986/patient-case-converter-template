@@ -104,7 +104,28 @@
     function renderPatientPhoto(p){ return p.photoCrop ? `<div class="patient-photo-crop" style="--patient-photo:url('${p.photo}')"></div>` : `<img class="patient-photo" src="${p.photo}"/>`; }
     function renderOdontogram(od){ return od.crop ? `<div class="odontogram odontogram-crop" style="--odontogram-image:url('${od.image}')"></div>` : `<div class="odontogram"><img src="${od.image}"/></div>`; }
     function renderTimeline(tl){ return tl.crop ? `<div class="timeline-crop" style="--timeline-image:url('${tl.image}')"></div>` : `<img class="screen-img" src="${tl.image}"/>`; }
-    function renderTimelineFull(tl){ return `<div class="timeline-full"><img class="screen-img" src="${tl.image}" alt="Plan completo"/></div>`; }
+    function renderTimelineFull(tl){
+  if(!tl.phases||!tl.phases.length){return '<div class="timeline-full"><img class="screen-img" src="'+tl.image+'" alt="Plan completo"/></div>';}
+  var h='<div style="padding:24px 20px 40px">';
+  h+='<h2 style="font-size:17px;font-weight:700;color:#1a1a1a;margin:0 0 6px">TU PLAN FECHA A FECHA</h2>';
+  h+='<p style="font-size:13px;color:#555;margin:0 0 20px;line-height:1.5">Si empiezas el <span style="color:#2a7c6f;font-weight:600">'+tl.startDate+'</span>, '+tl.intro+'</p>';
+  h+='<div style="position:relative;padding-left:28px">';
+  h+='<div style="position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:#e8e8e8"></div>';
+  tl.phases.forEach(function(p){
+    h+='<div style="position:relative;margin-bottom:14px">';
+    h+='<div style="position:absolute;left:-24px;top:14px;width:14px;height:14px;border-radius:50%;background:'+p.color+';z-index:1"></div>';
+    h+='<div style="background:#FAFAFA;border:1px solid #F0F0F0;box-shadow:0 2px 10px rgba(0,0,0,.06);border-radius:10px;padding:14px 16px">';
+    h+='<div style="font-size:14px;font-weight:700;color:#2a7c6f;margin-bottom:5px">'+p.date+'</div>';
+    h+='<div style="font-size:12px;font-style:italic;color:#777;margin-bottom:8px;line-height:1.5">'+p.emotion+'</div>';
+    p.items.forEach(function(item){
+      if(item&&item.link){h+='<div style="font-size:13px;color:#333;padding:3px 0"><a href="'+item.link+'" style="color:#2a7c6f;text-decoration:none">'+item.text+'</a></div>';}
+      else{h+='<div style="font-size:13px;color:#333;padding:3px 0">'+(typeof item==='string'?item:item.text)+'</div>';}
+    });
+    h+='</div></div>';
+  });
+  h+='</div></div>';
+  return h;
+}
     function renderHeader(){
       const p = patientData.patient;
       return `<div class="patient-header"><div class="patient-left">${renderPatientPhoto(p)}<div><div class="patient-name">${p.name}</div><div class="patient-age">${p.age}</div><div class="patient-status">● ${p.status}</div></div></div><img class="clinic-logo" src="${p.logo}"/></div>`;
