@@ -111,6 +111,29 @@
   h.push('<div style="padding:20px 16px 24px">');
   h.push('<h2 style="font-size:17px;font-weight:700;color:#1a1a1a;margin:0 0 6px">TU PLAN FECHA A FECHA</h2>');
   h.push('<p style="font-size:13px;color:#555;margin:0 0 20px;line-height:1.5">Si empiezas el <span style="color:#2a7c6f;font-weight:600">'+tl.startDate+'</span>, '+tl.intro+'</p>');
+  h.push('<div id="tl-wrap" style="position:relative;padding-left:32px">');
+  tl.phases.forEach(function(phase,i){
+    var last=i===tl.phases.length-1;
+    h.push('<div style="position:relative;margin-bottom:'+( last?'0':'16px')+'">');
+    if(!last){h.push('<div style="position:absolute;left:-16px;top:22px;bottom:-16px;width:2px;background:#d8d8d8"></div>');}
+    h.push('<div style="position:absolute;left:-23px;top:10px;width:16px;height:16px;border-radius:50%;background:#2a7c6f;border:3px solid #fff;box-shadow:0 0 0 2px #2a7c6f;z-index:1"></div>');
+    h.push('<div style="background:#fff;border:1px solid #ebebeb;border-radius:12px;padding:16px 18px;box-shadow:0 1px 6px rgba(0,0,0,0.05)">');
+    h.push('<div style="font-size:15px;font-weight:700;color:#2a7c6f;margin-bottom:6px">'+phase.date+'</div>');
+    h.push('<div style="font-size:13px;font-style:italic;color:#888;margin-bottom:10px;line-height:1.5">'+phase.emotion+'</div>');
+    phase.items.forEach(function(item){
+      var label=typeof item==="string"?item:(item&&item.text?item.text:"");
+      h.push('<div style="font-size:14px;color:#333;padding:2px 0;line-height:1.5">'+label+'</div>');
+    });
+    h.push("</div></div>");
+  });
+  h.push("</div></div>");
+  return h.join("");
+}
+  var h=[];
+  h.push(renderHeader());
+  h.push('<div style="padding:20px 16px 24px">');
+  h.push('<h2 style="font-size:17px;font-weight:700;color:#1a1a1a;margin:0 0 6px">TU PLAN FECHA A FECHA</h2>');
+  h.push('<p style="font-size:13px;color:#555;margin:0 0 20px;line-height:1.5">Si empiezas el <span style="color:#2a7c6f;font-weight:600">'+tl.startDate+'</span>, '+tl.intro+'</p>');
   h.push('<div style="position:relative;padding-left:32px">');
   tl.phases.forEach(function(phase, i){
     var isLast = i === tl.phases.length - 1;
