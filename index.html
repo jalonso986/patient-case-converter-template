@@ -118,8 +118,9 @@
     h+='<div style="font-size:14px;font-weight:700;color:#2a7c6f;margin-bottom:5px">'+p.date+'</div>';
     h+='<div style="font-size:12px;font-style:italic;color:#777;margin-bottom:8px;line-height:1.5">'+p.emotion+'</div>';
     p.items.forEach(function(item){
-      if(item&&item.link){h+='<div style="font-size:13px;color:#333;padding:3px 0"><a href="'+item.link+'" style="color:#2a7c6f;text-decoration:none">'+item.text+'</a></div>';}
-      else{h+='<div style="font-size:13px;color:#333;padding:3px 0">'+(typeof item==='string'?item:item.text)+'</div>';}
+      var label=typeof item==='string'?item:(item&&item.text?item.text:'');
+      if(item&&item.link){h+='<div style="font-size:13px;color:#333;padding:3px 0;line-height:1.5"><a href="'+item.link+'" style="color:#2a7c6f;text-decoration:none">'+label+'</a></div>';}
+      else{h+='<div style="font-size:13px;color:#333;padding:3px 0;line-height:1.5">'+label+'</div>';}
     });
     h+='</div></div>';
   });
