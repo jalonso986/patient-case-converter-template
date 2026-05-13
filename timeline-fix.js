@@ -1,11 +1,9 @@
 (function () {
   function buildPhaseHTML(tl) {
     var html = '<div style="padding:24px 20px 40px;background:#fff;">';
-    html += '<div style="margin-bottom:20px;">';
     html += '<h2 style="font-size:17px;font-weight:700;color:#1a1a1a;margin:0 0 6px">TU PLAN FECHA A FECHA</h2>';
     html += '<p style="font-size:13px;color:#555;margin:0;line-height:1.5">Si empiezas el <span style="color:#2a7c6f;font-weight:600">' + tl.startDate + '</span>, ' + tl.intro + '</p>';
-    html += '</div>';
-    html += '<div style="position:relative;padding-left:28px;">';
+    html += '<div style="position:relative;padding-left:28px;margin-top:20px;">';
     html += '<div style="position:absolute;left:7px;top:8px;bottom:8px;width:2px;background:#e8e8e8;"></div>';
     tl.phases.forEach(function (phase) {
       html += '<div style="position:relative;margin-bottom:14px;">';
@@ -33,9 +31,16 @@
     el.innerHTML = buildPhaseHTML(tl);
   }
 
-  document.addEventListener('DOMContentLoaded', applyIfNeeded);
-  window.addEventListener('popstate', function () { setTimeout(applyIfNeeded, 0); });
-  document.addEventListener('click', function (e) {
-    if (e.target.closest('[onclick]')) { setTimeout(applyIfNeeded, 0); }
+  document.addEventListener('DOMContentLoaded', function () {
+    // Apply immediately to replace init-rendered image
+    applyIfNeeded();
+    // Patch showScreen so re-applying on every timeline visit
+    var orig = window.showScreen;
+    if (typeof orig === 'function') {
+      window.showScreen = function (screen) {
+        orig(screen);
+        if (screen === 'timeline') applyIfNeeded();
+      };
+    }
   });
 })();
