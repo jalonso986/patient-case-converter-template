@@ -104,36 +104,7 @@
     function renderPatientPhoto(p){ return p.photoCrop ? `<div class="patient-photo-crop" style="--patient-photo:url('${p.photo}')"></div>` : `<img class="patient-photo" src="${p.photo}"/>`; }
     function renderOdontogram(od){ return od.crop ? `<div class="odontogram odontogram-crop" style="--odontogram-image:url('${od.image}')"></div>` : `<div class="odontogram"><img src="${od.image}"/></div>`; }
     function renderTimeline(tl){ return tl.crop ? `<div class="timeline-crop" style="--timeline-image:url('${tl.image}')"></div>` : `<img class="screen-img" src="${tl.image}"/>`; }
-    function renderTimelineFull(tl){
-  if(!tl.phases||!tl.phases.length){return '<div class="timeline-full"><img class="screen-img" src="'+tl.image+'" alt="Plan completo"/></div>';}
-  var p=window.patientData.patient;
-  var h='<div style="padding:0 0 40px">';
-  h+='<div class="patient-header" style="padding:22px 12px 18px;border-bottom:1px solid #f0f0f0;margin-bottom:0">';
-  h+='<div class="patient-left">';
-  if(p.photoCrop){h+='<div class="patient-photo-crop" style="--patient-photo:url(''+p.photo+'')"></div>';}
-  else{h+='<img class="patient-photo" src="'+p.photo+'"/>';}
-  h+='<div><div class="patient-name">'+p.name+'</div><div class="patient-age">'+p.age+'</div><div class="patient-status">● '+p.status+'</div></div></div>';
-  h+='<img class="clinic-logo" src="'+p.logo+'"/></div>';
-  h+='<div style="padding:24px 20px 0">';
-  h+='<h2 style="font-size:17px;font-weight:700;color:#1a1a1a;margin:0 0 6px">TU PLAN FECHA A FECHA</h2>';
-  h+='<p style="font-size:13px;color:#555;margin:0 0 20px;line-height:1.5">Si empiezas el <span style="color:#2a7c6f;font-weight:600">'+tl.startDate+'</span>, '+tl.intro+'</p>';
-  h+='<div style="position:relative;padding-left:32px">';
-  h+='<div style="position:absolute;left:9px;top:12px;bottom:12px;width:2px;background:#e0e0e0"></div>';
-  tl.phases.forEach(function(phase){
-    h+='<div style="position:relative;margin-bottom:16px">';
-    h+='<div style="position:absolute;left:-26px;top:16px;width:16px;height:16px;border-radius:50%;background:#2a7c6f;z-index:1;box-shadow:0 0 0 3px #fff,0 0 0 4px #2a7c6f"></div>';
-    h+='<div style="background:#fff;border:1px solid #e8e8e8;border-radius:12px;padding:16px 18px;box-shadow:0 1px 4px rgba(0,0,0,.04)">';
-    h+='<div style="font-size:15px;font-weight:700;color:#2a7c6f;margin-bottom:6px">'+phase.date+'</div>';
-    h+='<div style="font-size:13px;font-style:italic;color:#777;margin-bottom:10px;line-height:1.5">'+phase.emotion+'</div>';
-    phase.items.forEach(function(item){
-      var label=typeof item==='string'?item:(item&&item.text?item.text:'');
-      h+='<div style="font-size:14px;color:#333;padding:3px 0;line-height:1.5">'+label+'</div>';
-    });
-    h+='</div></div>';
-  });
-  h+='</div></div></div>';
-  return h;
-}
+    function renderTimelineFull(tl){ return '<div class="timeline-full"><img class="screen-img" src="'+tl.image+'" alt="Plan completo"/></div>'; }
     function renderHeader(){
       const p = patientData.patient;
       return `<div class="patient-header"><div class="patient-left">${renderPatientPhoto(p)}<div><div class="patient-name">${p.name}</div><div class="patient-age">${p.age}</div><div class="patient-status">● ${p.status}</div></div></div><img class="clinic-logo" src="${p.logo}"/></div>`;
