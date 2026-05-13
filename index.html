@@ -177,7 +177,8 @@
       line.style.top=(fTop-cTop)+'px';
       line.style.height=Math.max(0,lTop-fTop)+'px';
     }
-    function showScreen(id, push = true){ document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); closeDetail(false); currentScreen = id; window.scrollTo(0,0); if(id==='timeline') requestAnimationFrame(fixTimelineLine); if(push) history.pushState({screen:id}, ''); }
+    function showScreen(id, push = true){ document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); closeDetail(false); currentScreen = id; window.scrollTo(0,0); if(id==='timeline') requestAnimationFrame(fixTimelineLine); if(push) history.pushState({screen:id}, ''); 
+  document.querySelector('.app').style.minHeight = (id==='timeline') ? 'auto' : '';}
     function openDetail(src, push = true){ $('detail-img').src = src; $('detail').classList.add('active'); if(push) history.pushState({screen:currentScreen, detail:src}, ''); }
     function closeDetail(clear = true){ $('detail').classList.remove('active'); if(clear) $('detail-img').src = ''; }
     function goBack(){ history.back(); }
