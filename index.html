@@ -104,7 +104,43 @@
     function treatmentLines(title){ return String(title).replace(' ', '<br>'); }
     function renderPatientPhoto(p){ return p.photoCrop ? `<div class="patient-photo-crop" style="--patient-photo:url('${p.photo}')"></div>` : `<img class="patient-photo" src="${p.photo}"/>`; }
     function renderOdontogram(od){ return od.crop ? `<div class="odontogram odontogram-crop" style="--odontogram-image:url('${od.image}')"></div>` : `<div class="odontogram"><img src="${od.image}"/></div>`; }
-    function renderTimeline(tl){ return tl.crop ? `<div class="timeline-crop" style="--timeline-image:url('${tl.image}')"></div>` : `<img class="screen-img" src="${tl.image}"/>`; }
+    function getTitleForPhase(phase) {
+      if (phase.title) return phase.title;
+      var first = phase.items && phase.items[0];
+      if (!first) return '';
+      var text = typeof first === 'string' ? first : first.text;
+      return text.length > 20 ? text.slice(0, 20) + '…' : text;
+    }
+    function renderTimeline(tl) {
+      if (!tl.phases || !tl.phases.length) {
+        return tl.crop ? '<div class="timeline-crop" style="--timeline-image:url(\'' + tl.image + '\')"></div>' : '<img class="screen-img" src="' + tl.image + '"/>';
+      }
+      var cards = tl.phases.map(function(ph, i) {
+        var title = getTitleForPhase(ph);
+        var items = ph.items.map(function(it) {
+          return typeof it === 'string' ? it : it.text;
+        }).join(' · ');
+        return '<div style="min-width:160px;max-width:160px;border:1px solid #e8e8e8;border-radius:12px;padding:14px 12px;flex-shrink:0;position:relative;display:flex;flex-direction:column;">' +
+          '<div style="width:28px;height:28px;border-radius:50%;background:#2a7c6f;color:#fff;font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;position:relative;z-index:1;">' + (i + 1) + '</div>' +
+          '<div style="font-size:14px;font-weight:700;color:#1a1a1a;margin-top:10px;margin-bottom:6px;">' + title + '</div>' +
+          '<div style="font-size:12px;color:#555;line-height:1.4;margin-bottom:10px;">' + items + '</div>' +
+          '<div style="font-size:12px;font-weight:600;color:#2a7c6f;margin-top:auto;">' + ph.date + '</div>' +
+          '</div>';
+      }).join('');
+      return '<style>.tl-hstrip::-webkit-scrollbar{display:none}</style>' +
+        '<div style="background:#fff;border-radius:16px;border:1px solid #ebebeb;padding:16px;margin-bottom:12px;">' +
+        '<div style="display:flex;justify-content:space-between;align-items:center;">' +
+        '<span style="font-size:13px;font-weight:700;color:#1a1a1a;">TU PLAN EN VARIAS FASES</span>' +
+        '<span onclick="showScreen(\'timeline\')" style="font-size:12px;color:#2a7c6f;cursor:pointer;font-weight:500;">Ver plan completo ↗</span>' +
+        '</div>' +
+        '<div style="position:relative;margin-top:14px;">' +
+        '<div style="position:absolute;top:28px;left:26px;right:26px;height:2px;background:#e0e0e0;z-index:0;"></div>' +
+        '<div class="tl-hstrip" style="display:flex;overflow-x:auto;gap:12px;padding-bottom:8px;scrollbar-width:none;-ms-overflow-style:none;">' +
+        cards +
+        '</div>' +
+        '</div>' +
+        '</div>';
+    }
     function renderTimelineFull(tl){
       if(!tl.phases||!tl.phases.length){
         return '<div class="timeline-full"><div style="padding:0 12px;">'+renderHeader()+'</div><img class="screen-img" src="'+tl.image+'" alt="Plan completo"/></div>';
@@ -159,7 +195,7 @@
       const f = patientData.financial;
       const od = patientData.odontogram;
       const priority = patientData.treatments.filter(t => patientData.summaryTreatments.includes(t.title)).slice(0,3);
-      $('homeContent').innerHTML = `${renderHeader()}<div class="summary-card"><div class="summary-main"><div class="label">Inversión total</div><div class="amount">${normalizeCurrency(f.total)}</div><div class="finance">${f.financingAvailable ? '● Financiación disponible<br><br>' : ''}Desde <b>${f.monthly}</b><br>${f.monthlyNote}</div></div><div class="divider"></div><div class="summary-actions">${renderCta('☏','Resolver dudas<br>por WhatsApp',"window.open('https://wa.me/','_blank')")}${renderCta('▦','Ver plan paso a<br>paso',"showScreen('timeline')")}${renderCta('€','Ver coste<br>desglosado',"showScreen('breakdown')")}</div></div>${renderOdontogram(od)}<div class="section-title"><span>PLAN TRATAMIENTO</span><span onclick="showScreen('breakdown')" style="cursor:pointer">Ver desglose completo ↗</span></div><div class="mini-list">${priority.map(t => `<div class="mini-item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="icon" src="${t.icon}"/><div><div class="mini-title">${t.title}</div><div class="mini-desc">${t.description}</div></div><div class="mini-price">${t.total}</div><div>›</div></div>`).join('')}</div><div class="section-title"><span>TU PLAN EN VARIAS FASES</span><span onclick="showScreen('timeline')" style="cursor:pointer">Ver plan completo ↗</span></div>${renderTimeline(patientData.timeline)}`;
+      $('homeContent').innerHTML = `${renderHeader()}<div class="summary-card"><div class="summary-main"><div class="label">Inversión total</div><div class="amount">${normalizeCurrency(f.total)}</div><div class="finance">${f.financingAvailable ? '● Financiación disponible<br><br>' : ''}Desde <b>${f.monthly}</b><br>${f.monthlyNote}</div></div><div class="divider"></div><div class="summary-actions">${renderCta('☏','Resolver dudas<br>por WhatsApp',"window.open('https://wa.me/','_blank')")}${renderCta('▦','Ver plan paso a<br>paso',"showScreen('timeline')")}${renderCta('€','Ver coste<br>desglosado',"showScreen('breakdown')")}</div></div>${renderOdontogram(od)}<div class="section-title"><span>PLAN TRATAMIENTO</span><span onclick="showScreen('breakdown')" style="cursor:pointer">Ver desglose completo ↗</span></div><div class="mini-list">${priority.map(t => `<div class="mini-item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="icon" src="${t.icon}"/><div><div class="mini-title">${t.title}</div><div class="mini-desc">${t.description}</div></div><div class="mini-price">${t.total}</div><div>›</div></div>`).join('')}</div>${renderTimeline(patientData.timeline)}`;
       requestAnimationFrame(adjustAmountSize);
     }
     function renderBreakdown(){
