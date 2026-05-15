@@ -1,160 +1,160 @@
 const patientData = {
   patient: {
-    name: "Carla Aveiro Pérez",
-    age: "16 años",
+    name: "Vicente Alonso Rodríguez",
+    age: "47 años",
     status: "Tu plan personalizado ya está listo",
-    photo: "assets/patient-carla-source.png",
-    photoCrop: true,
+    photo: null,
+    photoCrop: false,
     logo: "assets/logo-Araujo.jpeg"
   },
 
   financial: {
-    total: "12.302,50 €",
-    monthly: "295€ /mes",
+    total: "16.785,39 €",
+    monthly: "699€ /mes",
     monthlyNote: "en 24 cómodas cuotas",
     financingAvailable: true
   },
 
   odontogram: {
-    image: "assets/odontograma-source.png",
+    image: null,
     crop: false
   },
 
   summaryTreatments: [
     "Ortodoncia Invisalign™",
-    "Tratamiento funcional complejo",
-    "Tratamiento gingivitis"
+    "Expansión Maxilar SARPE",
+    "Implante Unitario"
   ],
 
   treatments: [
     {
-      title: "Estudio interdisciplinar",
-      description: "Adquisición de imágenes, diagnóstico y plan tratamiento",
-      piece: "",
-      price: "250,00",
-      discount: "-12,50",
-      total: "237,50",
-      icon: "assets/icon-multidisciplinar.png",
-      explanation: "explanations/multidisciplinar.png"
-    },
-    {
-      title: "Tratamiento gingivitis",
-      description: "Puede evolucionar a periodontitis si no se trata a tiempo",
+      title: "Tratamiento periodontal",
+      description: "Control de la enfermedad de las encías para proteger la base de tu salud oral.",
       warning: true,
       piece: "",
-      price: "210,00",
-      discount: "-10,50",
-      total: "199,50",
+      price: "455,83",
+      discount: "-13,67",
+      total: "442,16",
       icon: "assets/icon-gingivitis.png",
       explanation: "explanations/gingivitis.png"
     },
     {
-      title: "Tratamiento funcional complejo",
-      description: "Mejora de la mordida y función",
+      title: "Limpieza profunda",
+      description: "Eliminación de sarro y placa en profundidad para sanear tus encías.",
       piece: "",
-      price: "3.000,00",
-      discount: "-150,00",
-      total: "2.850,00",
+      price: "186,86",
+      discount: "-13,08",
+      total: "173,78",
+      icon: null,
+      explanation: null
+    },
+    {
+      title: "Gingivectomía",
+      description: "Remodelación del tejido gingival para mejorar salud y estética.",
+      piece: "",
+      price: "321,15",
+      discount: "-16,06",
+      total: "305,09",
+      icon: null,
+      explanation: null
+    },
+    {
+      title: "Expansión Maxilar SARPE",
+      description: "Expansión ósea asistida quirúrgicamente para corregir la mordida.",
+      piece: "",
+      price: "3.068,70",
+      discount: "-153,44",
+      total: "2.915,26",
       icon: "assets/icon-sarpe.png",
       explanation: "explanations/sarpe.png"
     },
     {
-      title: "Ortodoncia Invisalign™",
-      description: "Alinea tus dientes de forma discreta y efectiva",
+      title: "Elevación de seno maxilar",
+      description: "Aumento de hueso para permitir la colocación del implante.",
       piece: "",
-      price: "4.390,00",
-      discount: "-219,50",
-      total: "4.170,50",
+      price: "1.811,03",
+      discount: "-126,77",
+      total: "1.684,26",
+      icon: null,
+      explanation: null
+    },
+    {
+      title: "Implante unitario",
+      description: "Raíz artificial de titanio para sustituir el diente perdido.",
+      piece: "36",
+      price: "1.356,29",
+      discount: "-67,81",
+      total: "1.288,48",
+      icon: null,
+      explanation: null
+    },
+    {
+      title: "Corona sobre implante",
+      description: "Corona de porcelana sobre el implante para restaurar la función y estética.",
+      piece: "36",
+      price: "1.014,53",
+      discount: "-50,73",
+      total: "963,80",
+      icon: null,
+      explanation: null
+    },
+    {
+      title: "Ortodoncia metálica",
+      description: "Corrección de la posición dental con brackets metálicos de alta precisión.",
+      piece: "",
+      price: "3.244,21",
+      discount: "-227,09",
+      total: "3.017,12",
+      icon: null,
+      explanation: null
+    },
+    {
+      title: "Ortodoncia Invisalign™",
+      description: "Alineadores transparentes para terminar de afinar tu sonrisa.",
+      piece: "",
+      price: "4.534,15",
+      discount: "-226,71",
+      total: "4.307,44",
       icon: "assets/icon-invisalign.png",
       explanation: "explanations/alineadores.png"
     },
     {
-      title: "Carillas porcelanas especiales",
-      description: "Mejora forma y color con un resultado natural y duradero.",
-      piece: "13",
-      price: "700,00",
-      discount: "-35,00",
-      total: "665,00",
-      icon: "assets/icon-carillas.png",
-      explanation: "explanations/carillas.png"
+      title: "Reconstrucción estética",
+      description: "Restauración del diente para recuperar forma, función y apariencia natural.",
+      piece: "24",
+      price: "268,88",
+      discount: "-26,89",
+      total: "241,99",
+      icon: null,
+      explanation: null
     },
     {
-      title: "Carillas porcelanas especiales",
-      description: "Mejora forma y color con un resultado natural y duradero.",
-      piece: "12",
-      price: "700,00",
-      discount: "-35,00",
-      total: "665,00",
-      icon: "assets/icon-carillas.png",
-      explanation: "explanations/carillas.png"
-    },
-    {
-      title: "Carillas porcelanas especiales",
-      description: "Mejora forma y color con un resultado natural y duradero.",
+      title: "Carillas de porcelana premium",
+      description: "Láminas de porcelana de alta calidad para una sonrisa natural y duradera.",
       piece: "11",
-      price: "700,00",
-      discount: "-35,00",
-      total: "665,00",
+      price: "784,04",
+      discount: "-23,52",
+      total: "760,52",
       icon: "assets/icon-carillas.png",
       explanation: "explanations/carillas.png"
     },
     {
-      title: "Carillas porcelanas especiales",
-      description: "Mejora forma y color con un resultado natural y duradero.",
-      piece: "21",
-      price: "700,00",
-      discount: "-35,00",
-      total: "665,00",
-      icon: "assets/icon-carillas.png",
-      explanation: "explanations/carillas.png"
-    },
-    {
-      title: "Carillas porcelanas especiales",
-      description: "Mejora forma y color con un resultado natural y duradero.",
-      piece: "22",
-      price: "700,00",
-      discount: "-35,00",
-      total: "665,00",
-      icon: "assets/icon-carillas.png",
-      explanation: "explanations/carillas.png"
-    },
-    {
-      title: "Carillas porcelanas especiales",
-      description: "Mejora forma y color con un resultado natural y duradero.",
-      piece: "23",
-      price: "700,00",
-      discount: "-35,00",
-      total: "665,00",
-      icon: "assets/icon-carillas.png",
-      explanation: "explanations/carillas.png"
-    },
-    {
-      title: "Férula descarga",
-      description: "Evita el desgaste dental y reduce la tensión mandibular acumulada durante el descanso.",
+      title: "Férula de descarga",
+      description: "Protector nocturno a medida para evitar el desgaste dental.",
       piece: "",
-      price: "495,00",
-      discount: "-24,75",
-      total: "470,25",
+      price: "466,49",
+      discount: "-46,65",
+      total: "419,84",
       icon: "assets/icon-ferula.png",
       explanation: "explanations/ferula.png"
     },
     {
-      title: "Essix contención",
-      description: "Mantiene tus dientes en su nueva posición tras el tratamiento de ortodoncia",
+      title: "Ferulización post-ortodoncia",
+      description: "Fija los dientes en su nueva posición para mantener el resultado a largo plazo.",
       piece: "",
-      price: "110,00",
-      discount: "-5,50",
-      total: "104,50",
-      icon: "assets/icon-essix.png",
-      explanation: "explanations/essix.png"
-    },
-    {
-      title: "Ferulización ortodoncia",
-      description: "Fija los dientes para evitar movimientos indeseados tras la ortodoncia.",
-      piece: "",
-      price: "495,00",
-      discount: "-24,75",
-      total: "470,25",
+      price: "295,17",
+      discount: "-29,52",
+      total: "265,65",
       icon: "assets/icon-retainer.png",
       explanation: "explanations/retainer.png"
     }
@@ -163,34 +163,52 @@ const patientData = {
   timeline: {
     image: "assets/plan-tratamiento.png",
     crop: true,
-    startDate: "30 de junio",
-    intro: "antes del verano tu sonrisa ya estará en marcha.",
+    startDate: "1 de junio",
+    intro: "este es el camino hacia tu nueva sonrisa.",
     phases: [
       {
-        date: "30 junio",
-        emotion: "Tu boca sana es el punto de partida de todo lo que viene.",
+        date: "junio – julio",
+        title: "Salud y base",
+        emotion: "Todo empieza por unas encías sanas. Es la base de todo lo que viene.",
         items: [
-          { text: "Tratamos tu gingivitis", link: "explanations/gingivitis.png" },
-          "Empezamos a alinear tu mordida"
+          "Tratamiento periodontal",
+          "Limpieza profunda",
+          "Gingivectomía"
         ],
         color: "#2a7c6f"
       },
       {
-        date: "julio – agosto",
-        emotion: "Aquí empieza el cambio que vas a notar cada vez que te mires al espejo.",
-        items: ["Alineamos tus dientes y ajustamos tu mordida con Invisalign"],
+        date: "agosto – octubre",
+        title: "Estructura",
+        emotion: "Preparamos el terreno para que todo encaje perfectamente.",
+        items: [
+          "Expansión Maxilar SARPE",
+          "Elevación de seno maxilar",
+          "Implante unitario"
+        ],
         color: "#e8934a"
       },
       {
-        date: "septiembre – octubre",
-        emotion: "Aquí tu sonrisa empieza a tomar su forma definitiva.",
-        items: ["Restauramos tu sonrisa con carillas de porcelana"],
+        date: "noviembre – julio",
+        title: "Alineación",
+        emotion: "Aquí empieza el cambio que vas a notar cada vez que te mires al espejo.",
+        items: [
+          "Ortodoncia metálica",
+          "Ortodoncia Invisalign™",
+          "Ferulización post-ortodoncia"
+        ],
         color: "#4a9eb5"
       },
       {
-        date: "diciembre",
-        emotion: "Este diciembre, tu sonrisa ya es tuya.",
-        items: ["A partir de aquí, solo hay que mantenerla."],
+        date: "agosto – septiembre",
+        title: "Estética final",
+        emotion: "Los últimos detalles que transforman tu sonrisa en definitiva.",
+        items: [
+          "Carillas de porcelana premium",
+          "Corona sobre implante",
+          "Reconstrucción estética",
+          "Férula de descarga"
+        ],
         color: "#c0392b"
       }
     ]

@@ -103,8 +103,8 @@
     function money(v){ return v || ''; }
     function normalizeCurrency(v){ return String(v || '').replace(/\s+€/g, '€'); }
     function treatmentLines(title){ return String(title).replace(' ', '<br>'); }
-    function renderPatientPhoto(p){ return p.photoCrop ? `<div class="patient-photo-crop" style="--patient-photo:url('${p.photo}')"></div>` : `<img class="patient-photo" src="${p.photo}"/>`; }
-    function renderOdontogram(od){ return od.crop ? `<div class="odontogram odontogram-crop" style="--odontogram-image:url('${od.image}')"></div>` : `<div class="odontogram"><img src="${od.image}"/></div>`; }
+    function renderPatientPhoto(p){ if(!p.photo) return '<div class="patient-photo" style="background:#e8e8e8;"></div>'; return p.photoCrop ? `<div class="patient-photo-crop" style="--patient-photo:url('${p.photo}')"></div>` : `<img class="patient-photo" src="${p.photo}"/>`; }
+    function renderOdontogram(od){ if(!od.image) return ''; return od.crop ? `<div class="odontogram odontogram-crop" style="--odontogram-image:url('${od.image}')"></div>` : `<div class="odontogram"><img src="${od.image}"/></div>`; }
     function getTitleForPhase(phase) {
       if (phase.title) return phase.title;
       var first = phase.items && phase.items[0];
@@ -196,12 +196,12 @@
       const f = patientData.financial;
       const od = patientData.odontogram;
       const priority = patientData.treatments.filter(t => patientData.summaryTreatments.includes(t.title)).slice(0,3);
-      $('homeContent').innerHTML = `${renderHeader()}<div class="summary-card"><div class="summary-main"><div class="label">Inversión total</div><div class="amount">${normalizeCurrency(f.total)}</div><div class="finance">${f.financingAvailable ? '● Financiación disponible<br><br>' : ''}Desde <b>${f.monthly}</b><br>${f.monthlyNote}</div></div><div class="divider"></div><div class="summary-actions">${renderCta('☏','Resolver dudas<br>por WhatsApp',"window.open('https://wa.me/','_blank')")}${renderCta('▦','Ver plan paso a<br>paso',"showScreen('timeline')")}${renderCta('€','Ver coste<br>desglosado',"showScreen('breakdown')")}</div></div>${renderOdontogram(od)}<div class="section-title"><span>PLAN TRATAMIENTO</span><span onclick="showScreen('breakdown')" style="font-size:13px;font-weight:600;color:#2a7c6f;text-decoration:none;cursor:pointer;">Ver desglose completo ↗</span></div><div class="mini-list">${priority.map(t => `<div class="mini-item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="icon" src="${t.icon}"/><div><div class="mini-title">${t.title}</div><div class="mini-desc">${t.description}</div></div><div class="mini-price">${t.total}</div><div>›</div></div>`).join('')}</div>${renderTimeline(patientData.timeline)}`;
+      $('homeContent').innerHTML = `${renderHeader()}<div class="summary-card"><div class="summary-main"><div class="label">Inversión total</div><div class="amount">${normalizeCurrency(f.total)}</div><div class="finance">${f.financingAvailable ? '● Financiación disponible<br><br>' : ''}Desde <b>${f.monthly}</b><br>${f.monthlyNote}</div></div><div class="divider"></div><div class="summary-actions">${renderCta('☏','Resolver dudas<br>por WhatsApp',"window.open('https://wa.me/','_blank')")}${renderCta('▦','Ver plan paso a<br>paso',"showScreen('timeline')")}${renderCta('€','Ver coste<br>desglosado',"showScreen('breakdown')")}</div></div>${renderOdontogram(od)}<div class="section-title"><span>PLAN TRATAMIENTO</span><span onclick="showScreen('breakdown')" style="font-size:13px;font-weight:600;color:#2a7c6f;text-decoration:none;cursor:pointer;">Ver desglose completo ↗</span></div><div class="mini-list">${priority.map(t => `<div class="mini-item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')">${t.icon ? `<img class="icon" src="${t.icon}"/>` : '<div class="icon" style="background:#eee;"></div>'}<div><div class="mini-title">${t.title}</div><div class="mini-desc">${t.description}</div></div><div class="mini-price">${t.total}</div><div>›</div></div>`).join('')}</div>${renderTimeline(patientData.timeline)}`;
       requestAnimationFrame(adjustAmountSize);
     }
     function renderBreakdown(){
       $('breakdownTop').innerHTML = renderHeader() + `${renderOdontogram(patientData.odontogram)}`;
-      $('treatmentList').innerHTML = patientData.treatments.map(t => `<div class="item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><img class="bd-icon" src="${t.icon}"/><div>${t.warning ? '<div class="badge">⚠ ATENCIÓN</div>' : ''}<div class="name">${treatmentLines(t.title)}</div><div class="desc">${t.description}</div></div><div class="cell piece">${t.piece || ''}</div><div class="cell">${money(t.price)}</div><div class="cell">${money(t.discount)}</div><div class="total">${money(t.total)}</div><div class="chev">›</div></div>`).join('') + renderBreakdownTotal();
+      $('treatmentList').innerHTML = patientData.treatments.map(t => `<div class="item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')">${t.icon ? `<img class="bd-icon" src="${t.icon}"/>` : '<div class="bd-icon" style="background:#eee;"></div>'}<div>${t.warning ? '<div class="badge">⚠ ATENCIÓN</div>' : ''}<div class="name">${treatmentLines(t.title)}</div><div class="desc">${t.description}</div></div><div class="cell piece">${t.piece || ''}</div><div class="cell">${money(t.price)}</div><div class="cell">${money(t.discount)}</div><div class="total">${money(t.total)}</div><div class="chev">›</div></div>`).join('') + renderBreakdownTotal();
       $('timelineScreenContent').innerHTML = renderTimelineFull(patientData.timeline);
     }
     function fixTimelineLine(){
@@ -216,7 +216,7 @@
     }
     function showScreen(id, push = true){ document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); closeDetail(false); currentScreen = id; window.scrollTo(0,0); if(id==='timeline') requestAnimationFrame(fixTimelineLine); if(push) history.pushState({screen:id}, ''); 
   document.querySelector('.app').style.minHeight = (id==='timeline') ? 'auto' : '';}
-    function openDetail(src, push = true){ $('detail-img').src = src; $('detail').classList.add('active'); if(push) history.pushState({screen:currentScreen, detail:src}, ''); }
+    function openDetail(src, push = true){ if(!src) return; $('detail-img').src = src; $('detail').classList.add('active'); if(push) history.pushState({screen:currentScreen, detail:src}, ''); }
     function closeDetail(clear = true){ $('detail').classList.remove('active'); if(clear) $('detail-img').src = ''; }
     function goBack(){ history.back(); }
     window.addEventListener('popstate', function(event){ const state = event.state || {screen:'home'}; if(state.detail){ showScreen(state.screen, false); openDetail(state.detail, false); return; } closeDetail(); showScreen(state.screen || 'home', false); });
