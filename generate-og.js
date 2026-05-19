@@ -31,7 +31,7 @@ function toBase64(filePath) {
   await page.setViewport({ width: 1200, height: 630, deviceScaleFactor: 2 });
 
   const filePath = 'file://' + path.resolve(__dirname, 'og-preview.html');
-  await page.goto(filePath, { waitUntil: 'domcontentloaded' });
+  await page.goto(filePath, { waitUntil: 'networkidle2', timeout: 20000 });
 
   await page.evaluate((imgs, pd) => {
     const firstName = pd.patient.name.split(' ')[0];
