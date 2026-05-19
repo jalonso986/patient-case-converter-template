@@ -3,8 +3,8 @@ const patientData = {
     name: "Vicente Alonso Rodríguez",
     age: "47 años",
     status: "Tu plan personalizado ya está listo",
-    photo: null,
-    photoCrop: false,
+    photo: "assets/patient-vicente-source.png",
+    photoCrop: true,
     logo: "assets/logo-Araujo.jpeg"
   },
 

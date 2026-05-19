@@ -1,0 +1,11 @@
+{
+  "name": "dental-card",
+  "version": "1.0.0",
+  "description": "Virtual Patient Card generator for dental clinics",
+  "scripts": {
+    "generate-og": "node generate-og.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^25.0.4"
+  }
+}
