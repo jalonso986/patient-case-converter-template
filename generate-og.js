@@ -47,6 +47,7 @@ function toBase64(filePath) {
       if (placeholderEl) placeholderEl.style.display = 'none';
     }
 
+    if (imgs.calendar) document.getElementById('icon-badge-calendar').src = imgs.calendar;
     if (imgs.calendar) document.getElementById('icon-calendar').src = imgs.calendar;
     if (imgs.implant) document.getElementById('icon-implant').src = imgs.implant;
     if (imgs.euro) document.getElementById('icon-euro').src = imgs.euro;

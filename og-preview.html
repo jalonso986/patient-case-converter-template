@@ -39,7 +39,7 @@
       white-space: nowrap;
     }
     #logo {
-      height: 52px;
+      height: 90px;
       object-fit: contain;
       margin-left: auto;
     }
@@ -121,6 +121,7 @@
       width: 44px;
       height: 44px;
       object-fit: contain;
+      filter: invert(40%) sepia(80%) saturate(600%) hue-rotate(120deg) brightness(90%);
     }
     .icon-label {
       font-size: 16px;
@@ -135,14 +136,13 @@
   <div class="main-row">
     <div class="left-panel">
       <div class="top-row">
-        <span class="badge">📅 DÍA 0 – TU PLAN ESTÁ LISTO</span>
+        <span class="badge"><img id="icon-badge-calendar" src="" alt="" style="width:18px;height:18px;object-fit:contain;vertical-align:middle;margin-right:6px;" /> DÍA 0 – TU PLAN ESTÁ LISTO</span>
         <img id="logo" src="" alt="Araújo" />
       </div>
       <div class="headline">
         <span id="patient-name"></span>
         <span class="tagline">tu sonrisa empieza aquí</span>
       </div>
-      <p class="subtitle">Hemos preparado un plan de tratamiento personalizado para ti.</p>
     </div>
     <div class="right-panel">
       <img id="patient-photo" src="" alt="" />
@@ -151,15 +151,15 @@
   </div>
 
   <div class="icons-bar">
-    <div class="icon-item">
+    <div class="icon-item" style="border-right:1px solid #e8e8e8;padding-right:80px;">
       <div class="icon-circle"><img id="icon-calendar" src="" alt="" /></div>
       <span class="icon-label">Plan paso&#10;a paso</span>
     </div>
-    <div class="icon-item">
+    <div class="icon-item" style="border-right:1px solid #e8e8e8;padding-right:80px;">
       <div class="icon-circle"><img id="icon-implant" src="" alt="" /></div>
       <span class="icon-label">Tratamiento&#10;explicado</span>
     </div>
-    <div class="icon-item">
+    <div class="icon-item" style="border-right:1px solid #e8e8e8;padding-right:80px;">
       <div class="icon-circle"><img id="icon-euro" src="" alt="" /></div>
       <span class="icon-label">Coste&#10;desglosado</span>
     </div>
