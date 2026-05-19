@@ -109,7 +109,8 @@
     function money(v){ return v || ''; }
     function normalizeCurrency(v){ return String(v || '').replace(/\s+€/g, '€'); }
     function treatmentLines(title){ return String(title).replace(' ', '<br>'); }
-    function renderPatientPhoto(p){ if(!p.photo) return '<div class="patient-photo" style="background:#e8e8e8;"></div>'; return p.photoCrop ? `<div class="patient-photo-crop" style="--patient-photo:url('${p.photo}')"></div>` : `<img class="patient-photo" src="${p.photo}"/>`; }
+    function parseTotal(str){ return parseFloat(String(str).replace(/\./g,'').replace(',','.')); }
+    function renderPatientPhoto(p){ if(!p.photo) return '<div class="patient-photo" style="background:#e8e8e8;"></div>'; if(p.photoCrop) return `<div class="patient-photo-crop" style="background-image:url('${p.photo}')"></div>`; return `<img class="patient-photo" src="${p.photo}"/>`; }
     function renderOdontogram(od){ if(!od.image) return ''; return od.crop ? `<div class="odontogram odontogram-crop" style="--odontogram-image:url('${od.image}')"></div>` : `<div class="odontogram"><img src="${od.image}"/></div>`; }
     function getTitleForPhase(phase) {
       if (phase.title) return phase.title;
@@ -201,7 +202,9 @@
     function renderHome(){
       const f = patientData.financial;
       const od = patientData.odontogram;
-      const priority = patientData.treatments.filter(t => patientData.summaryTreatments.includes(t.title)).slice(0,3);
+      const warnings = patientData.treatments.filter(t => t.warning);
+      const nonWarnings = patientData.treatments.filter(t => !t.warning).sort((a,b) => parseTotal(b.total) - parseTotal(a.total));
+      const priority = [...warnings, ...nonWarnings].slice(0, 3);
       $('homeContent').innerHTML = `${renderHeader()}<div class="summary-card"><div class="summary-main"><div class="label">Inversión total</div><div class="amount">${normalizeCurrency(f.total)}</div><div class="finance">${f.financingAvailable ? '● Financiación disponible<br><br>' : ''}Desde <b>${f.monthly}</b><br>${f.monthlyNote}</div></div><div class="divider"></div><div class="summary-actions">${renderCta('☏','Resolver dudas<br>por WhatsApp',"window.open('https://wa.me/','_blank')")}${renderCta('▦','Ver plan paso a<br>paso',"showScreen('timeline')")}${renderCta('€','Ver coste<br>desglosado',"showScreen('breakdown')")}</div></div>${renderOdontogram(od)}<div class="section-title"><span>PLAN TRATAMIENTO</span><span onclick="showScreen('breakdown')" style="font-size:13px;font-weight:600;color:#2a7c6f;text-decoration:none;cursor:pointer;">Ver desglose completo ↗</span></div><div class="mini-list">${priority.map(t => `<div class="mini-item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')">${t.icon ? `<img class="icon" src="${t.icon}"/>` : '<div class="icon" style="background:#eee;"></div>'}<div><div class="mini-title">${t.title}</div><div class="mini-desc">${t.description}</div></div><div class="mini-price">${t.total}</div><div>›</div></div>`).join('')}</div>${renderTimeline(patientData.timeline)}`;
       requestAnimationFrame(adjustAmountSize);
     }
