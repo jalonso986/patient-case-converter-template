@@ -18,9 +18,9 @@
       height: 470px;
     }
     .left-panel {
-      width: 620px;
+      width: 640px;
       flex-shrink: 0;
-      padding: 52px 56px 44px;
+      padding: 44px 52px 36px;
       display: flex;
       flex-direction: column;
       background: #ffffff;
@@ -32,55 +32,62 @@
     .badge {
       background: #e0f2ee;
       color: #1a6b5a;
-      font-size: 15px;
+      font-size: 14px;
       font-weight: 700;
-      padding: 10px 18px;
-      border-radius: 999px;
+      padding: 8px 16px;
+      border-radius: 100px;
       white-space: nowrap;
     }
-    .logo {
-      height: 60px;
+    #logo {
+      height: 52px;
       object-fit: contain;
       margin-left: auto;
     }
     .headline {
-      margin-top: 32px;
+      margin-top: 24px;
     }
-    .patient-name {
-      font-size: 96px;
+    #patient-name {
+      font-size: 80px;
       font-weight: 900;
       color: #0d1f3c;
       line-height: 1;
       display: block;
     }
     .tagline {
-      font-size: 80px;
+      font-size: 64px;
       font-weight: 900;
       color: #2a7c6f;
       line-height: 1.05;
       display: block;
     }
     .subtitle {
-      margin-top: 16px;
-      font-size: 19px;
-      color: #555;
-      line-height: 1.5;
+      margin-top: 14px;
+      font-size: 18px;
+      color: #666;
+      line-height: 1.4;
     }
     .right-panel {
       flex: 1;
       overflow: hidden;
       background: #f0f4f3;
     }
-    .right-panel img {
+    #patient-photo {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center top;
+      display: none;
     }
-    .right-panel .placeholder {
+    #photo-placeholder {
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, #2a7c6f 0%, #4ab5a5 50%, #e0f2ee 100%);
+      background: linear-gradient(135deg, #e0f2ee, #c8e8e2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 100px;
+      color: #2a7c6f;
+      opacity: 0.3;
     }
     .icons-bar {
       position: absolute;
@@ -89,21 +96,21 @@
       right: 0;
       height: 160px;
       background: #ffffff;
+      border-top: 1px solid #efefef;
       display: flex;
       align-items: center;
       justify-content: space-around;
-      padding: 0 56px;
-      border-top: 1px solid #f0f0f0;
+      padding: 0 80px;
     }
     .icon-item {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
     .icon-circle {
-      width: 72px;
-      height: 72px;
+      width: 80px;
+      height: 80px;
       background: #e0f2ee;
       border-radius: 50%;
       display: flex;
@@ -111,15 +118,16 @@
       justify-content: center;
     }
     .icon-circle img {
-      width: 38px;
-      height: 38px;
+      width: 44px;
+      height: 44px;
       object-fit: contain;
     }
     .icon-label {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 600;
       color: #333;
       text-align: center;
+      white-space: pre-line;
     }
   </style>
 </head>
@@ -128,52 +136,37 @@
     <div class="left-panel">
       <div class="top-row">
         <span class="badge">📅 DÍA 0 – TU PLAN ESTÁ LISTO</span>
-        <img class="logo" src="assets/logo-Araujo.jpeg" alt="Araújo" />
+        <img id="logo" src="" alt="Araújo" />
       </div>
       <div class="headline">
-        <span class="patient-name" id="patient-name"></span>
-        <span class="tagline">tu sonrisa<br>empieza aquí</span>
+        <span id="patient-name"></span>
+        <span class="tagline">tu sonrisa empieza aquí</span>
       </div>
       <p class="subtitle">Hemos preparado un plan de tratamiento personalizado para ti.</p>
     </div>
-    <div class="right-panel" id="right-panel"></div>
+    <div class="right-panel">
+      <img id="patient-photo" src="" alt="" />
+      <div id="photo-placeholder">👤</div>
+    </div>
   </div>
 
   <div class="icons-bar">
     <div class="icon-item">
-      <div class="icon-circle"><img src="assets/icon-og-calendar.png" alt="" /></div>
-      <span class="icon-label">Plan paso a paso</span>
+      <div class="icon-circle"><img id="icon-calendar" src="" alt="" /></div>
+      <span class="icon-label">Plan paso&#10;a paso</span>
     </div>
     <div class="icon-item">
-      <div class="icon-circle"><img src="assets/icon-og-implant.png" alt="" /></div>
-      <span class="icon-label">Tratamiento explicado</span>
+      <div class="icon-circle"><img id="icon-implant" src="" alt="" /></div>
+      <span class="icon-label">Tratamiento&#10;explicado</span>
     </div>
     <div class="icon-item">
-      <div class="icon-circle"><img src="assets/icon-og-euro.png" alt="" /></div>
-      <span class="icon-label">Coste desglosado</span>
+      <div class="icon-circle"><img id="icon-euro" src="" alt="" /></div>
+      <span class="icon-label">Coste&#10;desglosado</span>
     </div>
     <div class="icon-item">
-      <div class="icon-circle"><img src="assets/icon-og-shield.png" alt="" /></div>
-      <span class="icon-label">Resultados esperados</span>
+      <div class="icon-circle"><img id="icon-shield" src="" alt="" /></div>
+      <span class="icon-label">Resultados&#10;esperados</span>
     </div>
   </div>
-
-  <script src="data.js"></script>
-  <script>
-    const firstName = patientData.patient.name.split(' ')[0];
-    document.getElementById('patient-name').textContent = firstName;
-
-    const rightPanel = document.getElementById('right-panel');
-    if (patientData.patient.photo) {
-      const img = document.createElement('img');
-      img.src = patientData.patient.photo;
-      img.alt = firstName;
-      rightPanel.appendChild(img);
-    } else {
-      const div = document.createElement('div');
-      div.className = 'placeholder';
-      rightPanel.appendChild(div);
-    }
-  </script>
 </body>
 </html>
