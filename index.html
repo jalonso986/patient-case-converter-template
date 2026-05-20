@@ -61,21 +61,30 @@
     .mini-price { font-size:13px; font-weight:700; text-align:right; white-space:nowrap; }
     #breakdown.active { display:flex; flex-direction:column; height:100vh; overflow:hidden; background:#fff; }
     .bd-top { flex:0 0 auto; padding:22px 12px 10px; background:#fff; border-bottom:1px solid #ddd; }
-    .bd-list { flex:1 1 auto; overflow-y:auto; overflow-x:hidden; padding:0 14px 24px; background:#fff; }
-    .item { display:flex; align-items:flex-start; gap:12px; padding:16px 0; border-bottom:1px solid #efefef; background:#fff; cursor:pointer; width:100%; box-sizing:border-box; }
-    .item:last-of-type { border-bottom:0; }
-    .item.warning { background:#fff8f0; border-radius:12px; border:1.5px solid #f8c89e; margin:6px 0; padding:16px 12px; }
-    .bd-icon { width:44px; height:44px; border-radius:50%; object-fit:cover; object-position:center; border:1px solid #ddd; flex-shrink:0; display:block; background:#fff; }
-    .bd-icon-ph { width:44px; height:44px; border-radius:50%; background:#eee; flex-shrink:0; }
-    .item-body { flex:1 1 auto; min-width:0; }
-    .item-row1 { display:flex; justify-content:space-between; align-items:flex-start; gap:8px; }
-    .item-title { font-size:15px; font-weight:700; color:#222; line-height:1.2; }
-    .item-total { font-size:15px; font-weight:700; color:#222; white-space:nowrap; flex-shrink:0; }
-    .item-piece { font-size:12px; color:#888; margin-top:4px; }
-    .item-desc { font-size:13px; color:#666; margin-top:4px; line-height:1.4; }
-    .item.warning .item-desc { color:#f06f2c; }
-    .item-finance { font-size:12px; color:#888; margin-top:4px; }
-    .item-chev { font-size:22px; color:#bbb; flex-shrink:0; align-self:center; line-height:1; }
+    --ic-cols: 54px 1fr 30px 58px 50px 60px 18px;
+    --ic-gap: 4px;
+    --ic-pad-h: 8px;
+    --bd-pad-h: 10px;
+    .bd-colhdr { display:grid; grid-template-columns:var(--ic-cols); column-gap:var(--ic-gap); padding:5px calc(var(--bd-pad-h) + var(--ic-pad-h)); border-bottom:1px solid #e4e4e4; color:#aaa; font-size:11px; flex:0 0 auto; background:#fff; }
+    .bch-pieza { text-align:center; }
+    .bch-price,.bch-disc,.bch-total { text-align:right; white-space:nowrap; }
+    .bd-list { flex:1 1 auto; overflow-y:auto; overflow-x:hidden; padding:8px var(--bd-pad-h) 24px; background:#f5f5f5; }
+    .ic { display:grid; grid-template-columns:var(--ic-cols); column-gap:var(--ic-gap); align-items:center; padding:10px var(--ic-pad-h) 0; margin-bottom:8px; border-radius:12px; cursor:pointer; background:#fafafa; border:1px solid #f0f0f0; box-shadow:0 2px 10px rgba(0,0,0,.03); }
+    .ic.warning { background:#fff3e8; border-color:#f0c080; }
+    .ic-img { width:44px; height:44px; border-radius:50%; object-fit:cover; object-position:center; border:2px solid #eee; display:block; background:#fff; }
+    .ic-img-ph { width:44px; height:44px; border-radius:50%; background:#eee; border:2px solid #e0e0e0; }
+    .ic.warning .ic-img,.ic.warning .ic-img-ph { border-color:#e8915a; }
+    .ic-title-cell { min-width:0; }
+    .ic-badge { display:inline-block; background:#f5a623; color:#fff; font-size:10px; font-weight:700; padding:2px 7px; border-radius:8px; margin-bottom:3px; }
+    .ic-title { font-size:15px; font-weight:700; color:#1a1a1a; line-height:1.2; display:block; }
+    .ic-pieza { text-align:center; font-size:13px; color:#888; overflow:hidden; }
+    .ic-price { text-align:right; font-size:13px; color:#888; overflow:hidden; }
+    .ic-disc { text-align:right; font-size:13px; color:#888; overflow:hidden; }
+    .ic-disc.neg { color:#d9534f; }
+    .ic-total { text-align:right; font-size:15px; font-weight:700; color:#1a1a1a; overflow:hidden; }
+    .ic-chev { text-align:center; font-size:20px; color:#ccc; line-height:1; }
+    .ic-desc { grid-column:1 / -1; font-size:13px; color:#3b7dd8; line-height:1.4; padding:6px 0 10px; }
+    .ic.warning .ic-desc { color:#e07a30; }
     .badge { display:inline-block; background:#ffd993; color:#f08a00; font-size:8px; font-weight:700; padding:2px 6px; border-radius:8px; margin-bottom:4px; }
     .breakdown-total-card { margin:18px 0 26px; padding:18px 16px; border:1px solid #e2e6e8; border-radius:18px; background:#fff; box-shadow:0 8px 24px rgba(0,0,0,.08); text-align:center; }
     .breakdown-total-row { display:flex; align-items:baseline; justify-content:center; gap:16px; flex-wrap:wrap; }
@@ -94,6 +103,7 @@
     <section id="breakdown" class="screen">
       <button class="back" onclick="goBack()">← Volver</button>
       <div class="bd-top" id="breakdownTop"></div>
+      <div class="bd-colhdr"><div></div><div>Concepto</div><div class="bch-pieza">Pieza</div><div class="bch-price">Importe</div><div class="bch-disc">Desc.</div><div class="bch-total">Total</div><div></div></div>
       <div class="bd-list" id="treatmentList"></div>
     </section>
     <section id="timeline" class="screen"><button class="back" onclick="goBack()">← Volver</button><div id="timelineScreenContent"></div></section>
@@ -209,7 +219,7 @@
     }
     function renderBreakdown(){
       $('breakdownTop').innerHTML = renderHeader() + `${renderOdontogram(patientData.odontogram)}`;
-      $('treatmentList').innerHTML = patientData.treatments.map(t => `<div class="item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')">${t.icon ? `<img class="bd-icon" src="${t.icon}"/>` : '<div class="bd-icon-ph"></div>'}<div class="item-body">${t.warning ? '<div class="badge">⚠ ATENCIÓN</div>' : ''}<div class="item-row1"><span class="item-title">${t.title}</span><span class="item-total">${money(t.total)}</span></div>${t.piece ? `<div class="item-piece">Pieza: ${t.piece}</div>` : ''}<div class="item-desc">${t.description}</div>${t.discount ? `<div class="item-finance">Importe: ${money(t.price)} · Descuento: ${money(t.discount)}</div>` : ''}</div><div class="item-chev">›</div></div>`).join('') + renderBreakdownTotal();
+      $('treatmentList').innerHTML = patientData.treatments.map(t => `<div class="ic ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')">${t.icon ? `<img class="ic-img" src="${t.icon}"/>` : '<div class="ic-img-ph"></div>'}<div class="ic-title-cell">${t.warning ? '<span class="ic-badge">⚠ ATENCIÓN</span>' : ''}<span class="ic-title">${t.title}</span></div><div class="ic-pieza">${t.piece || ''}</div><div class="ic-price">${money(t.price)}</div><div class="ic-disc${t.discount && String(t.discount).trim().startsWith('-') ? ' neg' : ''}">${money(t.discount)}</div><div class="ic-total">${money(t.total)}</div><div class="ic-chev">›</div><div class="ic-desc">${t.description}</div></div>`).join('') + renderBreakdownTotal();
       $('timelineScreenContent').innerHTML = renderTimelineFull(patientData.timeline);
     }
     function fixTimelineLine(){
