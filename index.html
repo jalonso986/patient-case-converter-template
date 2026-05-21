@@ -61,22 +61,24 @@
     .mini-price { font-size:13px; font-weight:700; text-align:right; white-space:nowrap; }
     #breakdown.active { display:flex; flex-direction:column; height:100vh; overflow:hidden; background:#fff; }
     .bd-top { flex:0 0 auto; padding:22px 12px 10px; background:#fff; border-bottom:1px solid #ddd; }
-    .bd-column-header { display:grid; grid-template-columns:54px minmax(96px,1fr) 28px 56px 48px 58px 14px; padding:4px 14px; border-bottom:1px solid #cfcfcf; color:#555; font-size:13px; flex:0 0 auto; }
-    .bd-column-header .concepto { grid-column:1 / span 2; padding-left:0; text-align:left; }
-    .bd-column-header div { text-align:right; white-space:nowrap; }
+    .bd-column-header { display:flex; align-items:center; padding:4px 14px; border-bottom:1px solid #cfcfcf; color:#555; font-size:11px; flex:0 0 auto; width:100%; box-sizing:border-box; overflow:hidden; }
+    .bd-column-header div { flex:1; min-width:0; flex-shrink:1; text-align:right; white-space:nowrap; overflow:hidden; }
+    .bd-column-header .concepto { flex:2; text-align:left; }
     .bd-column-header .pieza { text-align:center; }
-    .bd-list { flex:1 1 auto; overflow-y:auto; overflow-x:hidden; padding:0 14px 24px; background:#fff; }
-    .item { display:grid; grid-template-columns:54px minmax(96px,1fr) 28px 56px 48px 58px 14px; align-items:center; min-height:78px; border-bottom:1px solid #cfcfcf; background:#fff; cursor:pointer; column-gap:0; padding-top:12px; }
+    .bd-column-header .bch-arr { flex:0 0 22px; }
+    .bd-list { flex:1 1 auto; overflow-y:auto; overflow-x:hidden; padding:0 14px 24px; background:#fff; width:100%; box-sizing:border-box; }
+    .item { display:flex; flex-wrap:wrap; align-items:center; box-sizing:border-box; border-bottom:1px solid #cfcfcf; background:#fff; cursor:pointer; padding-top:12px; }
     .item.warning { background:#fff8f0; border-radius:0; border:none; border-top:1.5px solid #f8c89e; border-bottom:1.5px solid #f8c89e; margin:0 -14px; padding:12px 14px 0; }
-    .bd-icon { width:46px; height:46px; border-radius:50%; object-fit:cover; object-position:center; border:1px solid #222; margin-left:0; display:block; background:#fff; }
-    .name { font-size:13.5px; font-weight:700; line-height:1.08; color:#222; }
-    .desc { font-size:14px; line-height:1.4; color:#0a2b4d; margin-top:8px; grid-column:1 / -1; padding-bottom:14px; }
+    .bd-main { flex:2; min-width:0; flex-shrink:1; display:flex; align-items:center; gap:8px; }
+    .bd-icon { width:46px; height:46px; border-radius:50%; object-fit:cover; object-position:center; border:1px solid #222; flex-shrink:0; display:block; background:#fff; }
+    .name { font-size:13.5px; font-weight:700; line-height:1.08; color:#222; min-width:0; }
+    .desc { flex:0 0 100%; font-size:14px; line-height:1.4; color:#0a2b4d; margin-top:8px; padding-bottom:14px; }
     .warning .desc { color:#f06f2c; }
     .badge { display:inline-block; background:#ffd993; color:#f08a00; font-size:8px; font-weight:700; padding:2px 6px; border-radius:8px; margin-bottom:3px; }
-    .cell { font-size:13.5px; color:#222; text-align:right; white-space:nowrap; }
+    .cell { flex:1; min-width:0; flex-shrink:1; font-size:12px; color:#222; text-align:right; white-space:nowrap; overflow:hidden; }
     .piece { text-align:center; }
-    .total { font-size:13.5px; font-weight:700; text-align:right; white-space:nowrap; color:#222; }
-    .chev { font-size:22px; color:#222; text-align:center; }
+    .total { flex:1; min-width:0; flex-shrink:1; font-size:12px; font-weight:700; text-align:right; white-space:nowrap; overflow:hidden; color:#222; }
+    .chev { flex:0 0 22px; font-size:22px; color:#222; text-align:center; }
     .breakdown-total-card { margin:18px 0 26px; padding:18px 16px; border:1px solid #e2e6e8; border-radius:18px; background:#fff; box-shadow:0 8px 24px rgba(0,0,0,.08); text-align:center; }
     .breakdown-total-row { display:flex; align-items:baseline; justify-content:center; gap:16px; flex-wrap:wrap; }
     .breakdown-total-label { font-size:18px; color:#0a2b4d; }
@@ -94,7 +96,7 @@
     <section id="breakdown" class="screen">
       <button class="back" onclick="goBack()">← Volver</button>
       <div class="bd-top" id="breakdownTop"></div>
-      <div class="bd-column-header"><div class="concepto">Concepto</div><div class="pieza">Pieza</div><div>Importe</div><div>Desc.</div><div>Total</div><div></div></div>
+      <div class="bd-column-header"><div class="concepto">Concepto</div><div class="pieza">Pieza</div><div>Importe</div><div>Desc.</div><div>Total</div><div class="bch-arr"></div></div>
       <div class="bd-list" id="treatmentList"></div>
     </section>
     <section id="timeline" class="screen"><button class="back" onclick="goBack()">← Volver</button><div id="timelineScreenContent"></div></section>
@@ -210,7 +212,7 @@
     }
     function renderBreakdown(){
       $('breakdownTop').innerHTML = renderHeader() + `${renderOdontogram(patientData.odontogram)}`;
-      $('treatmentList').innerHTML = patientData.treatments.map(t => `<div class="item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')">${t.icon ? `<img class="bd-icon" src="${t.icon}"/>` : '<div class="bd-icon" style="background:#eee;"></div>'}<div>${t.warning ? '<div class="badge">⚠ ATENCIÓN</div>' : ''}<div class="name">${treatmentLines(t.title)}</div></div><div class="cell piece">${t.piece || ''}</div><div class="cell">${money(t.price)}</div><div class="cell">${money(t.discount)}</div><div class="total">${money(t.total)}</div><div class="chev">›</div><div class="desc">${t.description}</div></div>`).join('') + renderBreakdownTotal();
+      $('treatmentList').innerHTML = patientData.treatments.map(t => `<div class="item ${t.warning ? 'warning' : ''}" onclick="openDetail('${t.explanation}')"><div class="bd-main">${t.icon ? `<img class="bd-icon" src="${t.icon}"/>` : '<div class="bd-icon" style="background:#eee;"></div>'}<div>${t.warning ? '<div class="badge">⚠ ATENCIÓN</div>' : ''}<div class="name">${treatmentLines(t.title)}</div></div></div><div class="cell piece">${t.piece || ''}</div><div class="cell">${money(t.price)}</div><div class="cell">${money(t.discount)}</div><div class="total">${money(t.total)}</div><div class="chev">›</div><div class="desc">${t.description}</div></div>`).join('') + renderBreakdownTotal();
       $('timelineScreenContent').innerHTML = renderTimelineFull(patientData.timeline);
     }
     function fixTimelineLine(){
