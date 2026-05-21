@@ -45,8 +45,8 @@ const patientData = {
       price: "186,86",
       discount: "-13,08",
       total: "173,78",
-      icon: null,
-      explanation: null
+      icon: "assets/icon-limpieza.png",
+      explanation: "explanations/limpieza.png"
     },
     {
       title: "Gingivectomía",
@@ -55,8 +55,8 @@ const patientData = {
       price: "321,15",
       discount: "-16,06",
       total: "305,09",
-      icon: null,
-      explanation: null
+      icon: "assets/icon-gingivectomia.png",
+      explanation: "explanations/gingivectomia.png"
     },
     {
       title: "Expansión Maxilar SARPE",
@@ -75,8 +75,8 @@ const patientData = {
       price: "1.811,03",
       discount: "-126,77",
       total: "1.684,26",
-      icon: null,
-      explanation: null
+      icon: "assets/icon-injerto.png",
+      explanation: "explanations/injerto.png"
     },
     {
       title: "Implante unitario",
@@ -85,8 +85,8 @@ const patientData = {
       price: "1.356,29",
       discount: "-67,81",
       total: "1.288,48",
-      icon: null,
-      explanation: null
+      icon: "assets/icon-implante.png",
+      explanation: "explanations/implante.png"
     },
     {
       title: "Corona sobre implante",
@@ -95,8 +95,8 @@ const patientData = {
       price: "1.014,53",
       discount: "-50,73",
       total: "963,80",
-      icon: null,
-      explanation: null
+      icon: "assets/icon-corona.png",
+      explanation: "explanations/corona.png"
     },
     {
       title: "Ortodoncia metálica",
@@ -105,8 +105,8 @@ const patientData = {
       price: "3.244,21",
       discount: "-227,09",
       total: "3.017,12",
-      icon: null,
-      explanation: null
+      icon: "assets/icon-ortodoncia.png",
+      explanation: "explanations/ortodoncia.png"
     },
     {
       title: "Ortodoncia Invisalign™",
